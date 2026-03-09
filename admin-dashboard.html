@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard | Ghana School Management Platform</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-page="admin-dashboard" class="dashboard-body">
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="index.html">
+        <span class="brand-mark"><img src="/src/assets/images/B4C07D7C-4D10-42C4-971A-112A666238A4.jpg" alt="A.D FASEMKYE Logo" width="100"></span>
+      </a>
+      <button class="nav-toggle" aria-expanded="false" aria-label="Toggle navigation">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+      <nav class="site-nav" aria-label="Main">
+        <a href="index.html" data-nav="home">Home</a>
+        <a href="school-auth.html" data-nav="school-auth">School Account</a>
+        <a href="admissions.html" data-nav="admissions">Admissions</a>
+        <a href="course-registration.html" data-nav="registration">Registration</a>
+        <a href="student-login.html" data-nav="student-login">Student Login</a>
+        <a href="teacher-login.html" data-nav="teacher-login">Staff Login</a>
+        <a href="admin-dashboard.html" data-nav="dashboard">Admin Dashboard</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="section dashboard-wrap">
+    <div class="container dashboard-layout">
+      <aside class="dashboard-sidebar panel">
+        <h2>Admin Console</h2>
+        <p id="dashboardUser"></p>
+        <div class="tab-list" role="tablist" aria-label="Dashboard sections">
+          <button class="tab-btn active" data-tab="overview">Overview</button>
+          <button class="tab-btn" data-tab="students">Students</button>
+          <button class="tab-btn" data-tab="applications">Admissions</button>
+          <button class="tab-btn" data-tab="attendance">Attendance</button>
+          <button class="tab-btn" data-tab="courses">Courses</button>
+          <button class="tab-btn" data-tab="staff">Staff</button>
+          <button class="tab-btn" data-tab="results">Exam Results</button>
+          <button class="tab-btn" data-tab="reports">Reports</button>
+        </div>
+        <button id="logoutBtn" class="btn btn-secondary full">Logout Staff</button>
+      </aside>
+
+      <section class="dashboard-content">
+        <article id="tab-overview" class="tab-panel active panel">
+          <h2>Overview</h2>
+          <div id="dashboardStats" class="stat-grid"></div>
+          <div class="two-col">
+            <div class="panel sub-panel">
+              <h3>Recent Admissions</h3>
+              <ul id="recentApplications" class="stack-list"></ul>
+            </div>
+            <div class="panel sub-panel">
+              <h3>Recent Exam Results</h3>
+              <ul id="recentResults" class="stack-list"></ul>
+            </div>
+          </div>
+        </article>
+
+        <article id="tab-students" class="tab-panel panel">
+          <h2>Students</h2>
+          <label>
+            Search
+            <input id="studentSearch" type="search" placeholder="Search by name, id, program">
+          </label>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Student ID</th>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Program</th>
+                  <th>Level</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="studentsTableBody"></tbody>
+            </table>
+          </div>
+        </article>
+
+        <article id="tab-applications" class="tab-panel panel">
+          <h2>Admissions Applications</h2>
+          <div id="applicationsGrid" class="card-grid two"></div>
+        </article>
+
+        <article id="tab-attendance" class="tab-panel panel">
+          <h2>Attendance</h2>
+          <form id="attendanceForm" class="app-form compact">
+            <div class="field-grid">
+              <label>
+                Date
+                <input type="date" name="date" required>
+              </label>
+              <label>
+                Course
+                <select name="courseId" id="attendanceCourse" required></select>
+              </label>
+            </div>
+            <div id="attendanceStudentList" class="check-grid"></div>
+            <button class="btn btn-primary" type="submit">Save Attendance</button>
+            <p id="attendanceMessage" class="form-message" role="status" aria-live="polite"></p>
+          </form>
+        </article>
+
+        <article id="tab-courses" class="tab-panel panel">
+          <h2>Courses</h2>
+          <form id="courseForm" class="app-form compact">
+            <div class="field-grid">
+              <label>
+                Code
+                <input name="code" required placeholder="CS410">
+              </label>
+              <label>
+                Title
+                <input name="title" required placeholder="Data Structures">
+              </label>
+              <label>
+                Program
+                <input name="program" required placeholder="Computer Science">
+              </label>
+              <label>
+                Level
+                <input name="level" required placeholder="400">
+              </label>
+              <label>
+                Credits
+                <input type="number" name="credits" min="1" max="6" value="3" required>
+              </label>
+              <label>
+                Seats
+                <input type="number" name="seats" min="5" max="200" value="35" required>
+              </label>
+            </div>
+            <button class="btn btn-primary" type="submit">Add Course</button>
+            <p id="courseMessage" class="form-message" role="status" aria-live="polite"></p>
+          </form>
+          <div id="coursesGrid" class="card-grid two"></div>
+        </article>
+
+        <article id="tab-staff" class="tab-panel panel">
+          <h2>Staff Management</h2>
+          <form id="staffForm" class="app-form compact">
+            <div class="field-grid">
+              <label>
+                Full Name
+                <input name="name" required placeholder="Kofi Mensah">
+              </label>
+              <label>
+                Email
+                <input type="email" name="email" required placeholder="kofi@school.edu.gh">
+              </label>
+              <label>
+                Role
+                <input name="role" required placeholder="Teacher / Accountant / Admin">
+              </label>
+              <label>
+                Department
+                <input name="department" required placeholder="ICT Department">
+              </label>
+              <label>
+                Password (Optional)
+                <input type="text" name="password" placeholder="Leave blank for Staff@123">
+              </label>
+            </div>
+            <button class="btn btn-primary" type="submit">Add Staff Member</button>
+            <p id="staffMessage" class="form-message" role="status" aria-live="polite"></p>
+          </form>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Staff ID</th>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Role</th>
+                  <th>Department</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="staffTableBody"></tbody>
+            </table>
+          </div>
+        </article>
+
+        <article id="tab-results" class="tab-panel panel">
+          <h2>Exam Results</h2>
+          <form id="examResultForm" class="app-form compact">
+            <div class="field-grid">
+              <label>
+                Student
+                <select id="resultStudentId" name="studentId" required></select>
+              </label>
+              <label>
+                Term
+                <input name="term" required placeholder="2026 Spring">
+              </label>
+              <label>
+                Subject / Course
+                <input name="subject" required placeholder="CSC201">
+              </label>
+              <label>
+                Score
+                <input type="number" name="score" min="0" max="100" required>
+              </label>
+              <label>
+                Grade (Optional)
+                <input name="grade" placeholder="A, B, C...">
+              </label>
+            </div>
+            <button class="btn btn-primary" type="submit">Record Result</button>
+            <p id="examResultMessage" class="form-message" role="status" aria-live="polite"></p>
+          </form>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Student</th>
+                  <th>Term</th>
+                  <th>Subject</th>
+                  <th>Score</th>
+                  <th>Grade</th>
+                  <th>Recorded By</th>
+                </tr>
+              </thead>
+              <tbody id="examResultsBody"></tbody>
+            </table>
+          </div>
+        </article>
+
+        <article id="tab-reports" class="tab-panel panel">
+          <h2>Reports</h2>
+          <div class="report-actions">
+            <button class="btn btn-secondary" data-report="students">Student Summary</button>
+            <button class="btn btn-secondary" data-report="attendance">Attendance Summary</button>
+            <button class="btn btn-secondary" data-report="results">Exam Results Summary</button>
+            <button class="btn btn-secondary" data-report="applications">Admissions Summary</button>
+          </div>
+          <div id="reportOutput" class="report-output"></div>
+        </article>
+      </section>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>&copy; <span id="year"></span> Ghana School Management Platform</p>
+      <p>Operations dashboard for school administrators.</p>
+    </div>
+  </footer>
+
+  <script src="js/storage.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
