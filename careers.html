@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Careers | Ghana School Management Platform</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-page="careers">
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="index.html">
+<span class="brand-mark"><img src="src/assets/images/gaffer-logo.png" alt="Logo" width="100"></span>
+      </a>
+      <button class="nav-toggle" aria-expanded="false" aria-label="Toggle navigation">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+      <nav class="site-nav" aria-label="Main">
+        <a href="index.html" data-nav="home">Home</a>
+        <a href="school-auth.html" data-nav="school-auth">School Account</a>
+        <a href="admissions.html" data-nav="admissions">Admissions</a>
+        <a href="careers.html" data-nav="careers">Careers</a>
+        <a href="course-registration.html" data-nav="registration">Registration</a>
+        <a href="student-login.html" data-nav="student-login">Student Login</a>
+        <a href="teacher-login.html" data-nav="teacher-login">Staff Login</a>
+        <a href="admin-dashboard.html" data-nav="dashboard">Admin Dashboard</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="section">
+    <div class="container">
+      <p class="eyebrow">Join Our Team</p>
+      <h1>Careers</h1>
+      <p>Explore career opportunities at schools using our platform.</p>
+
+      <div class="card-grid three" style="margin-top: 32px;">
+        <div class="action-card">
+          <i class="fa-solid fa-chalkboard-user"></i>
+          <h3>Teaching Positions</h3>
+          <p>Become a teacher and shape the future of students. Various subjects available.</p>
+          <a href="job-application.html" class="btn btn-primary" style="margin-top: 12px; width: auto;">Apply Now</a>
+        </div>
+        <div class="action-card">
+          <i class="fa-solid fa-user-tie"></i>
+          <h3>Administrative Roles</h3>
+          <p>Join our administration team to help manage school operations efficiently.</p>
+          <a href="job-application.html" class="btn btn-primary" style="margin-top: 12px; width: auto;">Apply Now</a>
+        </div>
+        <div class="action-card">
+          <i class="fa-solid fa-laptop-code"></i>
+          <h3>IT & Technology</h3>
+          <p>Help schools embrace technology for better education delivery.</p>
+          <a href="job-application.html" class="btn btn-primary" style="margin-top: 12px; width: auto;">Apply Now</a>
+        </div>
+        <div class="action-card">
+          <i class="fa-solid fa-calculator"></i>
+          <h3>Finance & Accounting</h3>
+          <p>Manage school finances, fees, and budgets.</p>
+          <a href="job-application.html" class="btn btn-primary" style="margin-top: 12px; width: auto;">Apply Now</a>
+        </div>
+        <div class="action-card">
+          <i class="fa-solid fa-book-atlas"></i>
+          <h3>Library Services</h3>
+          <p>Manage library resources and support student research.</p>
+          <a href="job-application.html" class="btn btn-primary" style="margin-top: 12px; width: auto;">Apply Now</a>
+        </div>
+        <div class="action-card">
+          <i class="fa-solid fa-hands-helping"></i>
+          <h3>Support Staff</h3>
+          <p>Various support roles including counselors, nurses, and more.</p>
+          <a href="job-application.html" class="btn btn-primary" style="margin-top: 12px; width: auto;">Apply Now</a>
+        </div>
+
+      <div class="panel" style="margin-top: 48px;">
+        <h2>Why Work With Us?</h2>
+        <ul class="stack-list">
+          <li><i class="fa-solid fa-check" style="color: var(--sea-500); margin-right: 8px;"></i> Competitive salaries and benefits</li>
+          <li><i class="fa-solid fa-check" style="color: var(--sea-500); margin-right: 8px;"></i> Professional development opportunities</li>
+          <li><i class="fa-solid fa-check" style="color: var(--sea-500); margin-right: 8px;"></i> Modern work environment</li>
+          <li><i class="fa-solid fa-check" style="color: var(--sea-500); margin-right: 8px;"></i> Work-life balance</li>
+          <li><i class="fa-solid fa-check" style="color: var(--sea-500); margin-right: 8px;"></i> Collaborative team culture</li>
+        </ul>
+      </div>
+
+      <div class="panel" style="margin-top: 24px;">
+        <h2>How to Apply</h2>
+        <p>Interested candidates should:</p>
+        <ol style="margin-left: 20px; margin-top: 12px; color: var(--ink-700);">
+          <li>Select your desired position above</li>
+          <li>Fill out the job application form</li>
+          <li>Submit your CV/Resume in the notes section</li>
+          <li>Our team will contact you for further steps</li>
+        </ol>
+        <a href="job-application.html" class="btn btn-primary" style="margin-top: 20px; width: auto;">Start Application</a>
+      </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>&copy; <span id="year"></span> Fasemkye School Management Platform</p>
+      <p>Career opportunities in education.</p>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>

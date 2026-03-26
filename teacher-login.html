@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Staff Login | Ghana School Management Platform</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-page="teacher-login">
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="index.html">
+<span class="brand-mark"><img src="src/assets/images/gaffer-logo.png" alt="Logo" width="100"></span>
+      </a>
+      <button class="nav-toggle" aria-expanded="false" aria-label="Toggle navigation">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+      <nav class="site-nav" aria-label="Main">
+        <a href="index.html" data-nav="home">Home</a>
+        <a href="school-auth.html" data-nav="school-auth">School Account</a>
+        <a href="admissions.html" data-nav="admissions">Admissions</a>
+        <a href="careers.html" data-nav="careers">Careers</a>
+        <a href="course-registration.html" data-nav="registration">Registration</a>
+        <a href="student-login.html" data-nav="student-login">Student Login</a>
+        <a href="teacher-login.html" data-nav="teacher-login">Staff Login</a>
+        <a href="admin-dashboard.html" data-nav="dashboard">Admin Dashboard</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="section">
+    <div class="container narrow">
+      <div class="login-panel">
+        <h2>Staff Login</h2>
+        <form id="teacherLoginForm" class="app-form" novalidate>
+          <label>
+            Staff ID or Email
+            <input type="text" name="identifier" required placeholder="STF-1001 or email">
+          </label>
+          <label>
+            Password
+            <input type="password" name="password" required placeholder="Your password">
+          </label>
+          <button class="btn btn-primary" type="submit">Sign In</button>
+          <p id="teacherLoginMessage" class="form-message" role="status" aria-live="polite"></p>
+        </form>
+        <div class="panel sub-panel">
+          <p><strong>Demo staff:</strong> STF-1002 / School@123</p>
+          <p>or email: admin@greenfield.edu.gh</p>
+          <p><a href="school-auth.html">Select Different School</a></p>
+        </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>&copy; <span id="year"></span> Ghana School Management Platform</p>
+      <p>Staff portal access.</p>
+    </div>
+  </footer>
+
+  <script src="js/storage.js"></script>
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+    
+    const form = document.getElementById('teacherLoginForm');
+    const messageEl = document.getElementById('teacherLoginMessage');
+
+    form.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const identifier = form.querySelector('[name="identifier"]').value.trim();
+      const password = form.querySelector('[name="password"]').value;
+
+      const result = await SMSStore.loginStaff(identifier, password);
+      
+      if (result.ok) {
+        messageEl.textContent = 'Login successful! Opening dashboard...';
+        messageEl.className = 'form-message success';
+        setTimeout(() => window.location.href = 'admin-dashboard.html', 1000);
+      } else {
+        messageEl.textContent = result.message;
+        messageEl.className = 'form-message error';
+      }
+    });
+  </script>
+</body>
+</html>

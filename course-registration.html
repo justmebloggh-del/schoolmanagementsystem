@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Course Registration | Ghana School Management Platform</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-page="registration">
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="index.html">
+<span class="brand-mark"><img src="src/assets/images/gaffer-logo.png" alt="Logo" width="100"></span>
+      </a>
+      <button class="nav-toggle" aria-expanded="false" aria-label="Toggle navigation">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+      <nav class="site-nav" aria-label="Main">
+        <a href="index.html" data-nav="home">Home</a>
+        <a href="school-auth.html" data-nav="school-auth">School Account</a>
+        <a href="admissions.html" data-nav="admissions">Admissions</a>
+        <a href="careers.html" data-nav="careers">Careers</a>
+        <a href="course-registration.html" data-nav="registration">Registration</a>
+        <a href="student-login.html" data-nav="student-login">Student Login</a>
+        <a href="teacher-login.html" data-nav="teacher-login">Staff Login</a>
+        <a href="admin-dashboard.html" data-nav="dashboard">Admin Dashboard</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="section">
+    <div class="container">
+      <p class="eyebrow">Course Registration</p>
+      <h1>Register for Courses</h1>
+      <p>Select your school, then choose your courses for the current term.</p>
+
+      <form id="courseRegistrationForm" class="app-form" novalidate style="max-width: 800px; margin: 0 auto;">
+        <div class="field-grid">
+          <label class="full-width">
+            Select School
+            <select name="schoolId" id="schoolSelect" required>
+              <option value="">Choose a school...</option>
+            </select>
+          </label>
+          <label>
+            Student ID or Email
+            <input type="text" name="studentIdentifier" id="studentIdentifier" placeholder="STU-1001 or email">
+          </label>
+          <label>
+            Password
+            <input type="password" name="password" id="password" placeholder="Your password">
+          </label>
+          <label>
+            Term
+            <input type="text" name="term" id="term" required placeholder="2025-2026 First Term">
+          </label>
+        </div>
+
+        <div class="course-fieldset" style="margin-top: 20px;">
+          <legend>Available Courses - Select Your Courses</legend>
+          <p style="font-size: 0.85rem; color: var(--ink-500); margin-bottom: 12px;">
+            <i class="fa-solid fa-info-circle"></i> Check the boxes next to courses you want to register for
+          </p>
+          <div id="courseChecklist" class="check-grid">
+            <p class="empty">Please select a school first to view available courses.</p>
+          </div>
+
+        <div id="selectedSummary" class="panel sub-panel" style="display:none; margin-top: 20px;">
+          <h4><i class="fa-solid fa-check-circle"></i> Selected Courses</h4>
+          <p id="selectedMeta" class="selected-meta"></p>
+          <ul id="selectedCoursesList" class="stack-list compact"></ul>
+        </div>
+
+        <button class="btn btn-primary" type="submit">Register Selected Courses</button>
+        <p id="registrationMessage" class="form-message" role="status" aria-live="polite"></p>
+      </form>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>&copy; <span id="year"></span> Fasemkye School Management Platform</p>
+      <p>Course registration portal.</p>
+    </div>
+  </footer>
+
+  <script src="js/storage.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Load schools into dropdown
+    async function loadSchools() {
+      try {
+        const response = await fetch('/api/schools');
+        const data = await response.json();
+        const select = document.getElementById('schoolSelect');
+        
+        if (data.ok && data.schools) {
+          data.schools.forEach(school => {
+            const option = document.createElement('option');
+            option.value = school.id;
+            option.textContent = school.name;
+            select.appendChild(option);
+          });
+        }
+      } catch (e) {
+        console.log('Could not load schools');
+      }
+    }
+    loadSchools();
+
+    async function loadCoursesForSchool(schoolId) {
+      const container = document.getElementById('courseChecklist');
+      
+      if (!schoolId) {
+        container.innerHTML = '<p class="empty">Please select a school first to view available courses.</p>';
+        return;
+      }
+
+      // Set the school in storage temporarily
+      if (typeof SMSStore !== 'undefined' && SMSStore.setSchoolId) {
+        SMSStore.setSchoolId(schoolId);
+      } else {
+        localStorage.setItem('sms_current_school', schoolId);
+      }
+      
+      const data = await SMSStore.getData();
+      const activeCourses = data.courses.filter(c => c.active);
+      
+      if (activeCourses.length === 0) {
+        container.innerHTML = '<p class="empty">No courses available for this school. Please check back later.</p>';
+        return;
+      }
+
+      container.innerHTML = activeCourses.map(course => `
+        <label class="check-item">
+          <input type="checkbox" name="courseIds" value="${course.id}">
+          <span>
+            <strong>${course.code}</strong> - ${course.title}
+            <small>${course.program} | Level ${course.level} | ${course.credits} credits</small>
+          </span>
+        </label>
+      `).join('');
+
+      container.querySelectorAll('input[name="courseIds"]').forEach(cb => {
+        cb.addEventListener('change', updateSelectedSummary);
+      });
+    }
+
+    // Listen for school selection change
+    document.getElementById('schoolSelect').addEventListener('change', function(e) {
+      loadCoursesForSchool(e.target.value);
+      // Hide selected summary when school changes
+      document.getElementById('selectedSummary').style.display = 'none';
+    });
+
+    function updateSelectedSummary() {
+      const selected = document.querySelectorAll('input[name="courseIds"]:checked');
+      const summary = document.getElementById('selectedSummary');
+      
+      if (selected.length === 0) {
+        summary.style.display = 'none';
+        return;
+      }
+
+      summary.style.display = 'block';
+      
+      let totalCredits = 0;
+      const items = document.querySelectorAll('.check-item');
+      let selectedList = [];
+
+      items.forEach(item => {
+        const cb = item.querySelector('input');
+        if (cb.checked) {
+          const code = item.querySelector('strong').textContent;
+          const title = item.querySelector('span').textContent.split('|')[0].replace(code, '').trim();
+          const creditsMatch = item.querySelector('small').textContent.match(/(\d+) credits/);
+          const credits = creditsMatch ? parseInt(creditsMatch[1]) : 0;
+          totalCredits += credits;
+          selectedList.push(`<li><strong>${code}</strong> - ${title} (${credits} credits)</li>`);
+        }
+      });
+
+      document.getElementById('selectedMeta').textContent = `${selected.length} course(s) selected | ${totalCredits} total credits`;
+      document.getElementById('selectedCoursesList').innerHTML = selectedList.join('');
+    }
+
+    const form = document.getElementById('courseRegistrationForm');
+    form.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      
+      const selected = Array.from(document.querySelectorAll('input[name="courseIds"]:checked')).map(cb => cb.value);
+      const messageEl = document.getElementById('registrationMessage');
+
+      if (selected.length === 0) {
+        messageEl.textContent = 'Please select at least one course.';
+        messageEl.className = 'form-message error';
+        return;
+      }
+
+      const payload = {
+        studentIdentifier: document.getElementById('studentIdentifier').value.trim(),
+        password: document.getElementById('password').value,
+        term: document.getElementById('term').value.trim(),
+        courseIds: selected
+      };
+
+      const result = await SMSStore.registerCourses(payload);
+      
+      if (result.ok) {
+        messageEl.textContent = result.message;
+        messageEl.className = 'form-message success';
+        document.querySelectorAll('input[name="courseIds"]').forEach(cb => cb.checked = false);
+        updateSelectedSummary();
+      } else {
+        messageEl.textContent = result.message;
+        messageEl.className = 'form-message error';
+      }
+    });
+  </script>
+</body>
+</html>

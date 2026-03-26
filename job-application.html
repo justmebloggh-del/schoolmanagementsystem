@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Job Application | Ghana School Management Platform</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-page="job-application">
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="index.html">
+<span class="brand-mark"><img src="src/assets/images/gaffer-logo.png" alt="Logo" width="100"></span>
+      </a>
+      <button class="nav-toggle" aria-expanded="false" aria-label="Toggle navigation">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+      <nav class="site-nav" aria-label="Main">
+        <a href="index.html" data-nav="home">Home</a>
+        <a href="school-auth.html" data-nav="school-auth">School Account</a>
+        <a href="admissions.html" data-nav="admissions">Admissions</a>
+        <a href="careers.html" data-nav="careers">Careers</a>
+        <a href="course-registration.html" data-nav="registration">Registration</a>
+        <a href="student-login.html" data-nav="student-login">Student Login</a>
+        <a href="teacher-login.html" data-nav="teacher-login">Staff Login</a>
+        <a href="admin-dashboard.html" data-nav="dashboard">Admin Dashboard</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="section">
+    <div class="container narrow">
+      <p class="eyebrow">Job Application</p>
+      <h1>Apply for a Position</h1>
+      <p>Select a school and complete the form below to apply for a job position.</p>
+
+      <form id="jobApplicationForm" class="app-form" novalidate>
+        <div class="field-grid">
+          <label class="full-width">
+            Select School *
+            <select name="schoolId" id="schoolSelect" required>
+              <option value="">Choose a school to apply to...</option>
+            </select>
+          </label>
+          <label class="full-width">
+            Select Position *
+            <select name="position" id="positionSelect" required>
+              <option value="">Choose a position...</option>
+              <option value="Teacher">Teacher</option>
+              <option value="Academic Officer">Academic Officer</option>
+              <option value="Administrator">Administrator</option>
+              <option value="IT Support">IT Support</option>
+              <option value="Accountant">Accountant</option>
+              <option value="Librarian">Librarian</option>
+              <option value="Counselor">Counselor</option>
+              <option value="Administrative Assistant">Administrative Assistant</option>
+              <option value="Lab Technician">Lab Technician</option>
+              <option value="Sports Coach">Sports Coach</option>
+              <option value="Nurse">School Nurse</option>
+              <option value="Security">Security Officer</option>
+              <option value="Cleaner">Cleaner</option>
+            </select>
+          </label>
+          <label>
+            Full Name *
+            <input type="text" name="fullName" required placeholder="Enter your full name">
+          </label>
+          <label>
+            Date of Birth *
+            <input type="date" name="dob" required>
+          </label>
+          <label>
+            Email *
+            <input type="email" name="email" required placeholder="your.email@example.com">
+          </label>
+          <label>
+            Phone *
+            <input type="tel" name="phone" required placeholder="+233 24 000 0000">
+          </label>
+          <label class="full-width">
+            Address *
+            <input type="text" name="address" required placeholder="Your residential address">
+          </label>
+          <label>
+            Highest Qualification *
+            <select name="qualification" required>
+              <option value="">Select Qualification</option>
+              <option value="PhD">PhD</option>
+              <option value="Master's Degree">Master's Degree</option>
+              <option value="Bachelor's Degree">Bachelor's Degree</option>
+              <option value="HND">HND</option>
+              <option value="Diploma">Diploma</option>
+              <option value="Certificate">Certificate</option>
+              <option value="SSSCE/WASSCE">SSSCE/WASSCE</option>
+            </select>
+          </label>
+          <label>
+            Years of Experience *
+            <input type="number" name="experience" min="0" required placeholder="0">
+          </label>
+          <label class="full-width">
+            Subject/Department of Interest *
+            <select name="department" required>
+              <option value="">Select Department</option>
+              <option value="Computer Science">Computer Science</option>
+              <option value="Mathematics">Mathematics</option>
+              <option value="English">English</option>
+              <option value="Science">Science</option>
+              <option value="Business">Business</option>
+              <option value="Accounting">Accounting</option>
+              <option value="Library">Library</option>
+              <option value="Administration">Administration</option>
+              <option value="IT">IT</option>
+              <option value="Sports">Sports</option>
+              <option value="Nursing">Nursing/Health</option>
+              <option value="Security">Security</option>
+              <option value="General">General</option>
+            </select>
+          </label>
+          <label class="full-width">
+            Upload CV/Resume *
+            <input type="file" name="cvFile" accept=".pdf,.doc,.docx,.jpg,.png" required>
+            <small style="color: var(--ink-500); font-size: 0.8rem;">Accepted formats: PDF, DOC, DOCX, JPG, PNG (Max 5MB)</small>
+          </label>
+          <label class="full-width">
+            Cover Letter / Additional Information
+            <textarea name="notes" rows="4" placeholder="Tell us about yourself and why you're the best candidate..."></textarea>
+          </label>
+        </div>
+        <button class="btn btn-primary" type="submit">Submit Application</button>
+        <p id="jobApplicationMessage" class="form-message" role="status" aria-live="polite"></p>
+      </form>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>&copy; <span id="year"></span> Ghana School Management Platform</p>
+      <p>Job application portal.</p>
+    </div>
+  </footer>
+
+  <script src="js/storage.js"></script>
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Load schools into dropdown
+    async function loadSchools() {
+      try {
+        const response = await fetch('/api/schools');
+        const data = await response.json();
+        const select = document.getElementById('schoolSelect');
+        
+        if (data.ok && data.schools && data.schools.length > 0) {
+          data.schools.forEach(school => {
+            const option = document.createElement('option');
+            option.value = school.id;
+            option.textContent = school.name + ' (' + school.email + ')';
+            option.dataset.name = school.name;
+            select.appendChild(option);
+          });
+        } else {
+          // If no schools from API, use demo school
+          const option = document.createElement('option');
+          option.value = 'SCH-1001';
+          option.textContent = 'Greenfield College Ghana (admin@greenfield.edu.gh)';
+          option.dataset.name = 'Greenfield College Ghana';
+          select.appendChild(option);
+        }
+      } catch (e) {
+        console.log('Could not load schools, using default');
+        // Fallback to demo school
+        const select = document.getElementById('schoolSelect');
+        const option = document.createElement('option');
+        option.value = 'SCH-1001';
+        option.textContent = 'Greenfield College Ghana (admin@greenfield.edu.gh)';
+        option.dataset.name = 'Greenfield College Ghana';
+        select.appendChild(option);
+      }
+    }
+    loadSchools();
+
+    const form = document.getElementById('jobApplicationForm');
+    const messageEl = document.getElementById('jobApplicationMessage');
+
+    // Function to convert file to base64
+    function fileToBase64(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = error => reject(error);
+      });
+    }
+
+    form.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      
+      const schoolSelect = document.getElementById('schoolSelect');
+      const schoolId = schoolSelect.value;
+      const schoolName = schoolSelect.options[schoolSelect.selectedIndex]?.dataset?.name || '';
+      
+      if (!schoolId) {
+        messageEl.textContent = 'Please select a school to apply to.';
+        messageEl.className = 'form-message error';
+        return;
+      }
+      
+      const fileInput = form.querySelector('input[type="file"]');
+      const file = fileInput.files[0];
+      
+      // Validate file
+      if (!file) {
+        messageEl.textContent = 'Please upload your CV/Resume.';
+        messageEl.className = 'form-message error';
+        return;
+      }
+      
+      // Check file size (5MB max)
+      if (file.size > 5 * 1024 * 1024) {
+        messageEl.textContent = 'File size must be less than 5MB.';
+        messageEl.className = 'form-message error';
+        return;
+      }
+
+      const formData = new FormData(form);
+      
+      // Convert file to base64
+      let cvBase64 = '';
+      try {
+        cvBase64 = await fileToBase64(file);
+      } catch (err) {
+        messageEl.textContent = 'Error reading file. Please try again.';
+        messageEl.className = 'form-message error';
+        return;
+      }
+
+      const payload = {
+        schoolId: schoolId,
+        schoolName: schoolName,
+        position: formData.get('position'),
+        fullName: formData.get('fullName')?.trim(),
+        dob: formData.get('dob'),
+        email: formData.get('email')?.trim(),
+        phone: formData.get('phone')?.trim(),
+        address: formData.get('address')?.trim(),
+        qualification: formData.get('qualification'),
+        experience: formData.get('experience'),
+        department: formData.get('department'),
+        cvFileName: file.name,
+        cvFileType: file.type,
+        cvData: cvBase64,
+        notes: formData.get('notes')?.trim()
+      };
+
+      if (!payload.position || !payload.fullName || !payload.dob || !payload.email || !payload.phone || !payload.address || !payload.qualification || !payload.experience || !payload.department) {
+        messageEl.textContent = 'Please fill in all required fields.';
+        messageEl.className = 'form-message error';
+        return;
+      }
+
+      // Store job application in localStorage with school info
+      const applications = JSON.parse(localStorage.getItem('jobApplications') || '[]');
+      const jobId = 'JOB-' + Date.now();
+      applications.push({
+        ...payload,
+        id: jobId,
+        submittedOn: new Date().toISOString().split('T')[0],
+        submittedAt: new Date().toISOString(),
+        status: 'pending'
+      });
+      localStorage.setItem('jobApplications', JSON.stringify(applications));
+
+      // Also try to send to server if available
+      try {
+        await fetch('/api/job-applications', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+      } catch (e) {
+        console.log('Server not available, stored locally');
+      }
+
+      messageEl.innerHTML = `Job application submitted successfully to <strong>${schoolName}</strong>! Reference: ${jobId}`;
+      messageEl.className = 'form-message success';
+      form.reset();
+      
+      // Reset school dropdown
+      loadSchools();
+    });
+  </script>
+</body>
+</html>

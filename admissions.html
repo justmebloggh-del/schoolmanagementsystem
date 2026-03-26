@@ -1,0 +1,172 @@
+oo<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admissions | Ghana School Management Platform</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-page="admissions">
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="index.html">
+<span class="brand-mark"><img src="src/assets/images/gaffer-logo.png" alt="Logo" width="100"></span>
+      </a>
+      <button class="nav-toggle" aria-expanded="false" aria-label="Toggle navigation">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+      <nav class="site-nav" aria-label="Main">
+        <a href="index.html" data-nav="home">Home</a>
+        <a href="school-auth.html" data-nav="school-auth">School Account</a>
+        <a href="admissions.html" data-nav="admissions">Admissions</a>
+        <a href="careers.html" data-nav="careers">Careers</a>
+        <a href="course-registration.html" data-nav="registration">Registration</a>
+        <a href="student-login.html" data-nav="student-login">Student Login</a>
+        <a href="teacher-login.html" data-nav="teacher-login">Staff Login</a>
+        <a href="admin-dashboard.html" data-nav="dashboard">Admin Dashboard</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="section">
+    <div class="container narrow">
+      <p class="eyebrow">Student Admission</p>
+      <h1>Apply for Admission</h1>
+      <p>Complete the application form below to apply for admission to your chosen school.</p>
+
+      <form id="admissionsForm" class="app-form" novalidate>
+        <div class="field-grid">
+          <label class="full-width">
+            Select School
+            <select name="schoolId" id="schoolSelect" required>
+              <option value="">Choose a school...</option>
+            </select>
+          </label>
+          <label>
+            Full Name
+            <input type="text" name="fullName" required placeholder="Enter your full name">
+          </label>
+          <label>
+            Date of Birth
+            <input type="date" name="dob" required>
+          </label>
+          <label>
+            Email
+            <input type="email" name="email" required placeholder="your.email@example.com">
+          </label>
+          <label>
+            Phone
+            <input type="tel" name="phone" required placeholder="+233 24 000 0000">
+          </label>
+          <label class="full-width">
+            Address
+            <input type="text" name="address" required placeholder="Your residential address">
+          </label>
+          <label>
+            First Choice Program
+            <select name="programFirstChoice" required>
+              <option value="">Select Program</option>
+              <option value="Computer Science">Computer Science</option>
+              <option value="Business Administration">Business Administration</option>
+              <option value="Mathematics">Mathematics</option>
+              <option value="Biological Sciences">Biological Sciences</option>
+              <option value="Engineering">Engineering</option>
+              <option value="Accounting">Accounting</option>
+            </select>
+          </label>
+          <label>
+            Second Choice Program
+            <select name="programSecondChoice">
+              <option value="">Select (Optional)</option>
+              <option value="Computer Science">Computer Science</option>
+              <option value="Business Administration">Business Administration</option>
+              <option value="Mathematics">Mathematics</option>
+              <option value="Biological Sciences">Biological Sciences</option>
+              <option value="Engineering">Engineering</option>
+              <option value="Accounting">Accounting</option>
+            </select>
+          </label>
+          <label class="full-width">
+            Additional Notes
+            <textarea name="notes" rows="3" placeholder="Any additional information, CV/Resume details..."></textarea>
+          </label>
+        </div>
+        <button class="btn btn-primary" type="submit">Submit Application</button>
+        <p id="admissionMessage" class="form-message" role="status" aria-live="polite"></p>
+      </form>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>&copy; <span id="year"></span> Ghana School Management Platform</p>
+      <p>Admissions portal.</p>
+    </div>
+  </footer>
+
+  <script src="js/storage.js"></script>
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Load schools into dropdown
+    async function loadSchools() {
+      try {
+        const response = await fetch('/api/schools');
+        const data = await response.json();
+        const select = document.getElementById('schoolSelect');
+        
+        if (data.ok && data.schools) {
+          data.schools.forEach(school => {
+            const option = document.createElement('option');
+            option.value = school.id;
+            option.textContent = school.name;
+            select.appendChild(option);
+          });
+        }
+      } catch (e) {
+        console.log('Could not load schools');
+      }
+    }
+    loadSchools();
+
+    const form = document.getElementById('admissionsForm');
+    const messageEl = document.getElementById('admissionMessage');
+
+    form.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const formData = new FormData(form);
+      const payload = {
+        fullName: formData.get('fullName')?.trim(),
+        dob: formData.get('dob'),
+        email: formData.get('email')?.trim(),
+        phone: formData.get('phone')?.trim(),
+        address: formData.get('address')?.trim(),
+        programFirstChoice: formData.get('programFirstChoice'),
+        programSecondChoice: formData.get('programSecondChoice'),
+        notes: formData.get('notes')?.trim()
+      };
+
+      if (!payload.fullName || !payload.dob || !payload.email || !payload.phone || !payload.address || !payload.programFirstChoice) {
+        messageEl.textContent = 'Please fill in all required fields.';
+        messageEl.className = 'form-message error';
+        return;
+      }
+
+      const result = await SMSStore.submitApplication(payload);
+      
+      if (result.ok) {
+        messageEl.textContent = 'Application submitted successfully! Reference: ' + result.applicationId;
+        messageEl.className = 'form-message success';
+        form.reset();
+      } else {
+        messageEl.textContent = result.message;
+        messageEl.className = 'form-message error';
+      }
+    });
+  </script>
+</body>
+</html>

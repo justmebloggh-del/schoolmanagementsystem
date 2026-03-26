@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admissions | Ghana School Management Platform</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-page="admissions">
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="index.html">
+        <span class="brand-mark"><img src="/src/assets/images/B4C07D7C-4D10-42C4-971A-112A666238A4.jpg" alt="A.D FASEMKYE Logo" width="100"></span>
+      </a>
+      <button class="nav-toggle" aria-expanded="false" aria-label="Toggle navigation">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+      <nav class="site-nav" aria-label="Main">
+        <a href="index.html" data-nav="home">Home</a>
+        <a href="school-auth.html" data-nav="school-auth">School Account</a>
+        <a href="admissions.html" data-nav="admissions">Admissions</a>
+        <a href="course-registration.html" data-nav="registration">Registration</a>
+        <a href="student-login.html" data-nav="student-login">Student Login</a>
+        <a href="teacher-login.html" data-nav="teacher-login">Staff Login</a>
+        <a href="admin-dashboard.html" data-nav="dashboard">Admin Dashboard</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="section">
+    <div class="container form-shell">
+      <div>
+        <p class="eyebrow">Admissions Intake</p>
+        <h1>New Student Application</h1>
+        <p>Submit applicant information. Staff can approve in the dashboard to create student profiles automatically.</p>
+        <ul class="stack-list compact">
+          <li>Each application is saved to the selected school only.</li>
+          <li>Approved applications become student records with login credentials.</li>
+          <li>Student records can then be tracked to attendance and exam results.</li>
+        </ul>
+      </div>
+
+      <form id="admissionsForm" class="app-form" novalidate>
+        <div class="field-grid">
+          <label>
+            Full Name
+            <input type="text" name="fullName" required placeholder="Ama Owusu">
+          </label>
+          <label>
+            Date of Birth
+            <input type="date" name="dob" required>
+          </label>
+          <label>
+            Email
+            <input type="email" name="email" required placeholder="student@example.com">
+          </label>
+          <label>
+            Phone
+            <input type="tel" name="phone" required placeholder="+233 24 000 1000">
+          </label>
+          <label>
+            Program Choice 1
+            <select name="programFirstChoice" required>
+              <option value="">Select program</option>
+              <option>Computer Science</option>
+              <option>Business Administration</option>
+              <option>Mathematics</option>
+              <option>Biological Sciences</option>
+              <option>Electrical Engineering</option>
+            </select>
+          </label>
+          <label>
+            Program Choice 2
+            <select name="programSecondChoice">
+              <option value="">Optional second choice</option>
+              <option>Computer Science</option>
+              <option>Business Administration</option>
+              <option>Mathematics</option>
+              <option>Biological Sciences</option>
+              <option>Electrical Engineering</option>
+            </select>
+          </label>
+          <label class="full-width">
+            Home Address
+            <textarea name="address" rows="3" required placeholder="24 Lake Road, Accra"></textarea>
+          </label>
+          <label class="full-width">
+            Notes (Optional)
+            <textarea name="notes" rows="3" placeholder="Special considerations or achievements"></textarea>
+          </label>
+        </div>
+
+        <label class="check-line">
+          <input type="checkbox" name="terms" required>
+          <span>I confirm the details above are accurate.</span>
+        </label>
+
+        <button class="btn btn-primary" type="submit">Submit Application</button>
+        <p id="admissionMessage" class="form-message" role="status" aria-live="polite"></p>
+      </form>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>&copy; <span id="year"></span> Ghana School Management Platform</p>
+      <p>Admissions and student lifecycle management.</p>
+    </div>
+  </footer>
+
+  <script src="js/storage.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
