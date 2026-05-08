@@ -573,8 +573,9 @@ module.exports = async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, X-School-ID');
   if (req.method === 'OPTIONS') return res.status(200).end();
 
-  const slug = Array.isArray(req.query.slug) ? req.query.slug : (req.query.slug ? [req.query.slug] : []);
-  const path = '/' + slug.join('/');
+  const rawPath = (req.url || '').split('?')[0];
+  const path = rawPath.replace(/^\/api/, '') || '/';
+  const slug = path.split('/').filter(Boolean);
   const m    = req.method;
 
   try {
