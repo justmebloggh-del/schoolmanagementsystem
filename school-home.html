@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>School Portal | Ghana School Management Platform</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .school-hero {
+      background: linear-gradient(135deg, var(--color-primary, #1a3c5e) 0%, #2563a8 100%);
+      color: #fff;
+      padding: 3rem 0 2.5rem;
+    }
+    .school-hero .eyebrow { color: rgba(255,255,255,0.75); }
+    .school-hero h1 { color: #fff; margin-bottom: 0.5rem; }
+    .school-hero p { color: rgba(255,255,255,0.85); margin-bottom: 0; }
+    .school-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.25rem;
+      margin-top: 1.25rem;
+    }
+    .school-meta-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.9rem;
+      color: rgba(255,255,255,0.8);
+    }
+    .school-meta-item i { opacity: 0.7; }
+    .school-hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-top: 1.75rem;
+    }
+    .btn-white {
+      background: #fff;
+      color: var(--color-primary, #1a3c5e);
+      border: none;
+      padding: 0.65rem 1.4rem;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      transition: opacity 0.15s;
+    }
+    .btn-white:hover { opacity: 0.9; }
+    .btn-outline-white {
+      background: transparent;
+      color: #fff;
+      border: 1.5px solid rgba(255,255,255,0.55);
+      padding: 0.65rem 1.4rem;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .btn-outline-white:hover { border-color: #fff; background: rgba(255,255,255,0.1); }
+    .stats-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin: 2rem 0;
+    }
+    .stat-tile {
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 10px;
+      padding: 1.25rem 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    }
+    .stat-tile-icon {
+      width: 46px;
+      height: 46px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      flex-shrink: 0;
+    }
+    .stat-tile-icon.blue   { background: #eff6ff; color: #2563eb; }
+    .stat-tile-icon.green  { background: #f0fdf4; color: #16a34a; }
+    .stat-tile-icon.amber  { background: #fffbeb; color: #d97706; }
+    .stat-tile-icon.purple { background: #faf5ff; color: #7c3aed; }
+    .stat-tile-body strong { display: block; font-size: 1.6rem; font-weight: 700; line-height: 1; }
+    .stat-tile-body span   { font-size: 0.8rem; color: #6b7280; }
+    .portal-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.25rem;
+      margin-top: 1.5rem;
+    }
+    .portal-card {
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 1.5rem;
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      transition: box-shadow 0.2s, border-color 0.2s, transform 0.15s;
+      cursor: pointer;
+    }
+    .portal-card:hover {
+      box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+      border-color: #93c5fd;
+      transform: translateY(-2px);
+    }
+    .portal-card-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+    }
+    .portal-card-icon.blue   { background: #eff6ff; color: #2563eb; }
+    .portal-card-icon.green  { background: #f0fdf4; color: #16a34a; }
+    .portal-card-icon.red    { background: #fef2f2; color: #dc2626; }
+    .portal-card-icon.amber  { background: #fffbeb; color: #d97706; }
+    .portal-card-icon.purple { background: #faf5ff; color: #7c3aed; }
+    .portal-card-icon.teal   { background: #f0fdfa; color: #0d9488; }
+    .portal-card h3 { font-size: 1rem; font-weight: 600; margin: 0; }
+    .portal-card p  { font-size: 0.85rem; color: #6b7280; margin: 0; line-height: 1.5; }
+    .portal-card .card-arrow {
+      margin-top: auto;
+      font-size: 0.8rem;
+      color: #2563eb;
+      font-weight: 500;
+    }
+    .side-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+    .info-block {
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 10px;
+      padding: 1.25rem 1.5rem;
+    }
+    .info-block h4 {
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #6b7280;
+      margin: 0 0 0.75rem;
+    }
+    .info-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.5rem;
+      font-size: 0.875rem;
+      padding: 0.35rem 0;
+      border-bottom: 1px solid #f3f4f6;
+    }
+    .info-row:last-child { border-bottom: none; }
+    .info-row i { color: #9ca3af; margin-top: 2px; flex-shrink: 0; }
+    .announcement-item {
+      padding: 0.6rem 0;
+      border-bottom: 1px solid #f3f4f6;
+      font-size: 0.875rem;
+    }
+    .announcement-item:last-child { border-bottom: none; }
+    .announcement-item .ann-date { font-size: 0.75rem; color: #9ca3af; }
+    .main-content-grid {
+      display: grid;
+      grid-template-columns: 1fr 300px;
+      gap: 2rem;
+      align-items: start;
+    }
+    .no-school-banner {
+      text-align: center;
+      padding: 3rem 1.5rem;
+      background: #fef3c7;
+      border: 1px solid #fcd34d;
+      border-radius: 12px;
+      margin-bottom: 2rem;
+    }
+    .no-school-banner i { font-size: 2.5rem; color: #d97706; margin-bottom: 1rem; }
+    .no-school-banner h2 { margin-bottom: 0.5rem; }
+    .no-school-banner p { color: #6b7280; margin-bottom: 1.25rem; }
+    @media (max-width: 900px) {
+      .stats-bar { grid-template-columns: repeat(2, 1fr); }
+      .portal-grid { grid-template-columns: repeat(2, 1fr); }
+      .main-content-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 540px) {
+      .stats-bar { grid-template-columns: 1fr 1fr; }
+      .portal-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body data-page="school-home">
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="index.html">
+        <span class="brand-mark"><img src="src/assets/images/gaffer-logo.png" alt="Logo"></span>
+      </a>
+      <button class="nav-toggle" aria-expanded="false" aria-label="Toggle navigation">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+      <nav class="site-nav" aria-label="Main">
+        <a href="index.html" data-nav="home">Home</a>
+        <a href="admissions.html" data-nav="admissions">Admissions</a>
+        <a href="careers.html" data-nav="careers">Careers</a>
+        <a href="student-login.html" data-nav="student-login">Student Login</a>
+        <a href="teacher-login.html" data-nav="teacher-login">Staff Login</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- School Hero -->
+  <section class="school-hero" id="schoolHero" style="display:none">
+    <div class="container">
+      <p class="eyebrow">School Management Portal</p>
+      <h1 id="schoolHeroName">School Name</h1>
+      <p id="schoolHeroTagline">Manage students, staff, courses, attendance, and exams from one place.</p>
+      <div class="school-meta" id="schoolMetaBar">
+        <span class="school-meta-item" id="metaEmail"><i class="fa-solid fa-envelope"></i> <span></span></span>
+        <span class="school-meta-item" id="metaPhone" style="display:none"><i class="fa-solid fa-phone"></i> <span></span></span>
+        <span class="school-meta-item" id="metaAddress" style="display:none"><i class="fa-solid fa-location-dot"></i> <span></span></span>
+      </div>
+      <div class="school-hero-actions">
+        <a href="admin-login.html" class="btn-white"><i class="fa-solid fa-gauge-high"></i> Admin Dashboard</a>
+        <a href="school-auth.html" class="btn-outline-white" id="switchSchoolBtn"><i class="fa-solid fa-right-left"></i> Switch School</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- No school selected state -->
+  <div class="container" id="noSchoolBanner" style="display:none; padding-top:2rem">
+    <div class="no-school-banner">
+      <i class="fa-solid fa-school-flag"></i>
+      <h2>No School Selected</h2>
+      <p>Sign in to your school account to access the management portal.</p>
+      <a href="school-auth.html" class="btn btn-primary">Sign In to School</a>
+    </div>
+  </div>
+
+  <main class="section" id="mainContent" style="display:none">
+    <div class="container">
+
+      <!-- Stats bar -->
+      <div class="stats-bar">
+        <div class="stat-tile">
+          <div class="stat-tile-icon blue"><i class="fa-solid fa-user-graduate"></i></div>
+          <div class="stat-tile-body">
+            <strong id="statStudents">—</strong>
+            <span>Students</span>
+          </div>
+        </div>
+        <div class="stat-tile">
+          <div class="stat-tile-icon green"><i class="fa-solid fa-chalkboard-user"></i></div>
+          <div class="stat-tile-body">
+            <strong id="statStaff">—</strong>
+            <span>Staff Members</span>
+          </div>
+        </div>
+        <div class="stat-tile">
+          <div class="stat-tile-icon amber"><i class="fa-solid fa-file-circle-check"></i></div>
+          <div class="stat-tile-body">
+            <strong id="statApplications">—</strong>
+            <span>Pending Applications</span>
+          </div>
+        </div>
+        <div class="stat-tile">
+          <div class="stat-tile-icon purple"><i class="fa-solid fa-book-open"></i></div>
+          <div class="stat-tile-body">
+            <strong id="statCourses">—</strong>
+            <span>Active Courses</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="main-content-grid">
+        <!-- Left: portal cards -->
+        <div>
+          <div class="section-head" style="margin-bottom:1rem">
+            <h2>School Operations</h2>
+            <p>Select a section to manage your school.</p>
+          </div>
+
+          <div class="portal-grid">
+            <a class="portal-card" href="admin-login.html">
+              <div class="portal-card-icon blue"><i class="fa-solid fa-gauge-high"></i></div>
+              <h3>Admin Dashboard</h3>
+              <p>Full control over students, staff, courses, attendance, results, and reports.</p>
+              <span class="card-arrow">Open dashboard <i class="fa-solid fa-arrow-right"></i></span>
+            </a>
+
+            <a class="portal-card" href="admissions.html">
+              <div class="portal-card-icon green"><i class="fa-solid fa-user-plus"></i></div>
+              <h3>Admissions</h3>
+              <p>Accept new student applications. Applications route directly to this school.</p>
+              <span class="card-arrow">View form <i class="fa-solid fa-arrow-right"></i></span>
+            </a>
+
+            <a class="portal-card" href="student-login.html">
+              <div class="portal-card-icon teal"><i class="fa-solid fa-user-graduate"></i></div>
+              <h3>Student Portal</h3>
+              <p>Students log in to register for courses, check results, and view attendance.</p>
+              <span class="card-arrow">Student login <i class="fa-solid fa-arrow-right"></i></span>
+            </a>
+
+            <a class="portal-card" href="teacher-login.html">
+              <div class="portal-card-icon purple"><i class="fa-solid fa-chalkboard-user"></i></div>
+              <h3>Staff Login</h3>
+              <p>Teachers and administrative staff sign in to manage their duties.</p>
+              <span class="card-arrow">Staff login <i class="fa-solid fa-arrow-right"></i></span>
+            </a>
+
+            <a class="portal-card" href="course-registration.html">
+              <div class="portal-card-icon amber"><i class="fa-solid fa-list-check"></i></div>
+              <h3>Course Registration</h3>
+              <p>Students register for courses for a given term using their student ID.</p>
+              <span class="card-arrow">Register courses <i class="fa-solid fa-arrow-right"></i></span>
+            </a>
+
+            <a class="portal-card" href="careers.html">
+              <div class="portal-card-icon red"><i class="fa-solid fa-briefcase"></i></div>
+              <h3>Careers & Jobs</h3>
+              <p>Post job openings and receive applications from qualified candidates.</p>
+              <span class="card-arrow">View openings <i class="fa-solid fa-arrow-right"></i></span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Right: school info + announcements -->
+        <aside class="side-panel">
+          <div class="info-block" id="schoolInfoBlock">
+            <h4>School Info</h4>
+            <div class="info-row"><i class="fa-solid fa-school"></i> <span id="infoName">—</span></div>
+            <div class="info-row"><i class="fa-solid fa-envelope"></i> <span id="infoEmail">—</span></div>
+            <div class="info-row" id="infoPhoneRow"><i class="fa-solid fa-phone"></i> <span id="infoPhone"></span></div>
+            <div class="info-row" id="infoAddressRow"><i class="fa-solid fa-location-dot"></i> <span id="infoAddress"></span></div>
+            <div class="info-row"><i class="fa-solid fa-id-badge"></i> <span id="infoId" style="font-family:monospace;font-size:0.8rem;color:#9ca3af"></span></div>
+          </div>
+
+          <div class="info-block">
+            <h4>Announcements</h4>
+            <div id="sideAnnouncementList"><p style="color:#9ca3af;font-size:0.85rem">Loading...</p></div>
+          </div>
+
+          <div class="info-block" style="background:#fef9f0;border-color:#fed7aa">
+            <h4 style="color:#92400e">Quick Admin</h4>
+            <p style="font-size:0.82rem;color:#78350f;margin:0 0 0.75rem">Admin staff sign in with their staff credentials.</p>
+            <a href="admin-login.html" class="btn btn-primary" style="width:100%;text-align:center;display:block">Admin Sign In</a>
+          </div>
+        </aside>
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>&copy; <span id="year"></span> Fasemkye School Management Platform</p>
+      <p>School portal — students, staff, academics, and operations.</p>
+    </div>
+  </footer>
+
+  <script src="js/storage.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    (async function () {
+      document.getElementById('year').textContent = new Date().getFullYear();
+
+      // nav toggle
+      const toggle = document.querySelector('.nav-toggle');
+      const nav = document.querySelector('.site-nav');
+      if (toggle && nav) {
+        toggle.addEventListener('click', function () {
+          const open = nav.classList.toggle('open');
+          toggle.setAttribute('aria-expanded', String(open));
+        });
+      }
+
+      const school = await SMSStore.getCurrentSchool();
+
+      if (!school) {
+        document.getElementById('noSchoolBanner').style.display = 'block';
+        return;
+      }
+
+      // Show hero
+      const hero = document.getElementById('schoolHero');
+      hero.style.display = 'block';
+      document.getElementById('schoolHeroName').textContent = school.name;
+      document.getElementById('mainContent').style.display = 'block';
+
+      // Hero meta
+      const metaEmail = document.getElementById('metaEmail');
+      metaEmail.querySelector('span').textContent = school.email || '';
+
+      if (school.phone) {
+        const mp = document.getElementById('metaPhone');
+        mp.style.display = 'flex';
+        mp.querySelector('span').textContent = school.phone;
+      }
+      if (school.address) {
+        const ma = document.getElementById('metaAddress');
+        ma.style.display = 'flex';
+        ma.querySelector('span').textContent = school.address;
+      }
+
+      // Side info
+      document.getElementById('infoName').textContent    = school.name;
+      document.getElementById('infoEmail').textContent   = school.email || '—';
+      document.getElementById('infoId').textContent      = school.id;
+
+      if (school.phone) {
+        document.getElementById('infoPhone').textContent = school.phone;
+      } else {
+        document.getElementById('infoPhoneRow').style.display = 'none';
+      }
+      if (school.address) {
+        document.getElementById('infoAddress').textContent = school.address;
+      } else {
+        document.getElementById('infoAddressRow').style.display = 'none';
+      }
+
+      // Load metrics + announcements
+      try {
+        const [metrics, data] = await Promise.all([SMSStore.getOverviewMetrics(), SMSStore.getData()]);
+        document.getElementById('statStudents').textContent     = metrics.totalStudents      ?? '0';
+        document.getElementById('statStaff').textContent        = metrics.totalStaff         ?? '0';
+        document.getElementById('statApplications').textContent = metrics.pendingApplications ?? '0';
+        const activeCourses = data.courses ? data.courses.filter(function(c){ return c.active; }).length : 0;
+        document.getElementById('statCourses').textContent      = activeCourses;
+        const annList = document.getElementById('sideAnnouncementList');
+        if (data.announcements && data.announcements.length) {
+          annList.innerHTML = data.announcements.slice(0, 5).map(function (a) {
+            return '<div class="announcement-item"><div class="ann-date">' + a.createdAt + '</div><strong>' + a.title + '</strong></div>';
+          }).join('');
+        } else {
+          annList.innerHTML = '<p style="color:#9ca3af;font-size:0.85rem">No announcements yet.</p>';
+        }
+      } catch (e) {
+        // non-fatal — stats stay as dashes
+      }
+    })();
+  </script>
+</body>
+</html>

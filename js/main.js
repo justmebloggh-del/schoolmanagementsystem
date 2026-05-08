@@ -237,7 +237,7 @@
         showMessage(createMessage, note, false);
 
         setTimeout(function () {
-          window.location.href = "teacher-login.html";
+          window.location.href = "school-home.html";
         }, 700);
       });
     }
@@ -257,9 +257,9 @@
           return;
         }
 
-        showMessage(loginMessage, "School selected. Continue with staff login.", false);
+        showMessage(loginMessage, "School selected. Opening school portal...", false);
         setTimeout(function () {
-          window.location.href = "teacher-login.html";
+          window.location.href = "school-home.html";
         }, 600);
       });
     }
