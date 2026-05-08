@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admissions | Ghana School Management Platform</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .admission-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 24px;
+      border-bottom: 2px solid rgba(92,116,137,0.15);
+      padding-bottom: 0;
+    }
+    .admission-tab-btn {
+      border: none;
+      background: none;
+      padding: 10px 20px;
+      font-family: "Sora", sans-serif;
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: var(--ink-500);
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      margin-bottom: -2px;
+      border-radius: 0;
+      transition: color 0.15s, border-color 0.15s;
+    }
+    .admission-tab-btn.active {
+      color: var(--sea-700);
+      border-bottom-color: var(--sea-700);
+    }
+    .admission-tab-btn:hover:not(.active) {
+      color: var(--ink-900);
+    }
+    .admission-panel {
+      display: none;
+    }
+    .admission-panel.active {
+      display: block;
+    }
+  </style>
+</head>
+<body data-page="admissions">
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="index.html">
+<span class="brand-mark"><img src="src/assets/images/gaffer-logo.png" alt="Logo"></span>
+      </a>
+      <button class="nav-toggle" aria-expanded="false" aria-label="Toggle navigation">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+      <nav class="site-nav" aria-label="Main">
+        <a href="index.html" data-nav="home">Home</a>
+        <a href="admissions.html" data-nav="admissions">Admissions</a>
+        <a href="careers.html" data-nav="careers">Careers</a>
+        <a href="student-login.html" data-nav="student-login">Student Login</a>
+        <a href="teacher-login.html" data-nav="teacher-login">Staff Login</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="section">
+    <div class="container">
+      <p class="eyebrow">Student Portal</p>
+      <h1>Admissions</h1>
+      <p>Apply for admission or register for courses after you have been accepted.</p>
+
+      <div class="admission-tabs">
+        <button class="admission-tab-btn active" data-tab="apply">
+          <i class="fa-solid fa-user-plus"></i> Apply for Admission
+        </button>
+        <button class="admission-tab-btn" data-tab="registration">
+          <i class="fa-solid fa-book-open"></i> Course Registration
+        </button>
+      </div>
+
+      <!-- Admission Application Panel -->
+      <div id="panel-apply" class="admission-panel active">
+        <div style="max-width: 680px;">
+          <h2>Apply for Admission</h2>
+          <p>Complete the form below to apply for admission to your chosen school.</p>
+          <form id="admissionsForm" class="app-form" novalidate>
+            <div class="field-grid">
+              <label class="full-width">
+                Select School
+                <select name="schoolId" id="schoolSelectAdmission" required>
+                  <option value="">Choose a school...</option>
+                </select>
+              </label>
+              <label>
+                Full Name
+                <input type="text" name="fullName" required placeholder="Enter your full name">
+              </label>
+              <label>
+                Date of Birth
+                <input type="date" name="dob" required>
+              </label>
+              <label>
+                Email
+                <input type="email" name="email" required placeholder="your.email@example.com">
+              </label>
+              <label>
+                Phone
+                <input type="tel" name="phone" required placeholder="+233 24 000 0000">
+              </label>
+              <label class="full-width">
+                Address
+                <input type="text" name="address" required placeholder="Your residential address">
+              </label>
+              <label>
+                First Choice Program
+                <select name="programFirstChoice" required>
+                  <option value="">Select Program</option>
+                  <option value="Computer Science">Computer Science</option>
+                  <option value="Business Administration">Business Administration</option>
+                  <option value="Mathematics">Mathematics</option>
+                  <option value="Biological Sciences">Biological Sciences</option>
+                  <option value="Engineering">Engineering</option>
+                  <option value="Accounting">Accounting</option>
+                </select>
+              </label>
+              <label>
+                Second Choice Program
+                <select name="programSecondChoice">
+                  <option value="">Select (Optional)</option>
+                  <option value="Computer Science">Computer Science</option>
+                  <option value="Business Administration">Business Administration</option>
+                  <option value="Mathematics">Mathematics</option>
+                  <option value="Biological Sciences">Biological Sciences</option>
+                  <option value="Engineering">Engineering</option>
+                  <option value="Accounting">Accounting</option>
+                </select>
+              </label>
+              <label class="full-width">
+                Additional Notes
+                <textarea name="notes" rows="3" placeholder="Any additional information, CV/Resume details..."></textarea>
+              </label>
+            </div>
+            <button class="btn btn-primary" type="submit">Submit Application</button>
+            <p id="admissionMessage" class="form-message" role="status" aria-live="polite"></p>
+          </form>
+        </div>
+      </div>
+
+      <!-- Course Registration Panel -->
+      <div id="panel-registration" class="admission-panel">
+        <div style="max-width: 800px;">
+          <h2>Course Registration</h2>
+          <p>Select your school, then choose your courses for the current term.</p>
+          <form id="courseRegistrationForm" class="app-form" novalidate>
+            <div class="field-grid">
+              <label class="full-width">
+                Select Course
+                <select name="schoolId" id="schoolSelectReg" required>
+                  <option value="">Choose a school...</option>
+                </select>
+              </label>
+              <label>
+                Student ID or Email
+                <input type="text" name="studentIdentifier" id="studentIdentifier" placeholder="STU-1001 or email">
+              </label>
+              <label>
+                Password
+                <input type="password" name="password" id="password" placeholder="Your password">
+              </label>
+              <label>
+                Term
+                <input type="text" name="term" id="term" required placeholder="2025-2026 First Term">
+              </label>
+            </div>
+
+            <div class="course-fieldset" style="margin-top: 20px;">
+              <legend>Available Courses — Select Your Courses</legend>
+              <p style="font-size:0.85rem;color:var(--ink-500);margin-bottom:12px;">
+                <i class="fa-solid fa-info-circle"></i> Check the boxes next to courses you want to register for
+              </p>
+              <div id="courseChecklist" class="check-grid">
+                <p class="empty">Loading courses...</p>
+              </div>
+            </div>
+
+            <div id="selectedSummary" class="panel sub-panel" style="display:none;margin-top:20px;">
+              <h4><i class="fa-solid fa-check-circle"></i> Selected Courses</h4>
+              <p id="selectedMeta" class="selected-meta"></p>
+              <ul id="selectedCoursesList" class="stack-list compact"></ul>
+            </div>
+
+            <button class="btn btn-primary" type="submit">Register Selected Courses</button>
+            <p id="registrationMessage" class="form-message" role="status" aria-live="polite"></p>
+          </form>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>&copy; <span id="year"></span> Ghana School Management Platform</p>
+      <p>Admissions &amp; registration portal.</p>
+    </div>
+  </footer>
+
+  <script src="js/storage.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Tab switching
+    document.querySelectorAll('.admission-tab-btn').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        document.querySelectorAll('.admission-tab-btn').forEach(function (b) { b.classList.remove('active'); });
+        document.querySelectorAll('.admission-panel').forEach(function (p) { p.classList.remove('active'); });
+        btn.classList.add('active');
+        document.getElementById('panel-' + btn.dataset.tab).classList.add('active');
+      });
+    });
+
+    // Open registration tab if URL has #registration
+    if (window.location.hash === '#registration') {
+      document.querySelector('[data-tab="registration"]').click();
+    }
+
+    // Load schools into both dropdowns, then auto-load courses for first school
+    async function loadSchools() {
+      try {
+        const response = await fetch('/api/schools');
+        const data = await response.json();
+        if (data.ok && data.schools && data.schools.length > 0) {
+          ['schoolSelectAdmission', 'schoolSelectReg'].forEach(function (id) {
+            const sel = document.getElementById(id);
+            data.schools.forEach(function (school) {
+              const opt = document.createElement('option');
+              opt.value = school.id;
+              opt.textContent = school.name;
+              sel.appendChild(opt);
+            });
+          });
+          // Auto-select first school and load its courses immediately
+          const regSel = document.getElementById('schoolSelectReg');
+          regSel.value = data.schools[0].id;
+          loadCoursesForSchool(data.schools[0].id);
+        }
+      } catch (e) { /* no server */ }
+    }
+    loadSchools();
+
+    // Admission form submit
+    const admForm = document.getElementById('admissionsForm');
+    const admMsg = document.getElementById('admissionMessage');
+    admForm.addEventListener('submit', async function (e) {
+      e.preventDefault();
+      const fd = new FormData(admForm);
+      const schoolId = (fd.get('schoolId') || '').trim();
+      if (!schoolId) {
+        admMsg.textContent = 'Please select a school to apply to.';
+        admMsg.className = 'form-message error';
+        return;
+      }
+      // Set the selected school so the X-School-ID header is sent correctly
+      localStorage.setItem('sms_current_school', schoolId);
+      const payload = {
+        schoolId: schoolId,
+        fullName: (fd.get('fullName') || '').trim(),
+        dob: fd.get('dob'),
+        email: (fd.get('email') || '').trim(),
+        phone: (fd.get('phone') || '').trim(),
+        address: (fd.get('address') || '').trim(),
+        programFirstChoice: fd.get('programFirstChoice'),
+        programSecondChoice: fd.get('programSecondChoice'),
+        notes: (fd.get('notes') || '').trim()
+      };
+      if (!payload.fullName || !payload.dob || !payload.email || !payload.phone || !payload.address || !payload.programFirstChoice) {
+        admMsg.textContent = 'Please fill in all required fields.';
+        admMsg.className = 'form-message error';
+        return;
+      }
+      const result = await SMSStore.submitApplication(payload);
+      if (result.ok) {
+        admMsg.textContent = 'Application submitted! Reference: ' + result.applicationId;
+        admMsg.className = 'form-message success';
+        admForm.reset();
+      } else {
+        admMsg.textContent = result.message;
+        admMsg.className = 'form-message error';
+      }
+    });
+
+    // Course registration
+    async function loadCoursesForSchool(schoolId) {
+      const container = document.getElementById('courseChecklist');
+      if (!schoolId) {
+        container.innerHTML = '<p class="empty">Please select a school first to view available courses.</p>';
+        return;
+      }
+      localStorage.setItem('sms_current_school', schoolId);
+      const data = await SMSStore.getData();
+      const active = data.courses.filter(function (c) { return c.active; });
+      if (active.length === 0) {
+        container.innerHTML = '<p class="empty">No courses available for this school.</p>';
+        return;
+      }
+      container.innerHTML = active.map(function (c) {
+        return '<label class="check-item"><input type="checkbox" name="courseIds" value="' + c.id + '">' +
+          '<span><strong>' + c.code + '</strong> - ' + c.title +
+          '<small>' + c.program + ' | Level ' + c.level + ' | ' + c.credits + ' credits</small></span></label>';
+      }).join('');
+      container.querySelectorAll('input[name="courseIds"]').forEach(function (cb) {
+        cb.addEventListener('change', updateSelectedSummary);
+      });
+    }
+
+    document.getElementById('schoolSelectReg').addEventListener('change', function (e) {
+      loadCoursesForSchool(e.target.value);
+      document.getElementById('selectedSummary').style.display = 'none';
+    });
+
+    function updateSelectedSummary() {
+      const selected = document.querySelectorAll('input[name="courseIds"]:checked');
+      const summary = document.getElementById('selectedSummary');
+      if (selected.length === 0) { summary.style.display = 'none'; return; }
+      summary.style.display = 'block';
+      let totalCredits = 0;
+      let selectedList = [];
+      document.querySelectorAll('.check-item').forEach(function (item) {
+        const cb = item.querySelector('input');
+        if (cb.checked) {
+          const code = item.querySelector('strong').textContent;
+          const creditsMatch = item.querySelector('small').textContent.match(/(\d+) credits/);
+          const credits = creditsMatch ? parseInt(creditsMatch[1]) : 0;
+          totalCredits += credits;
+          selectedList.push('<li><strong>' + code + '</strong> (' + credits + ' credits)</li>');
+        }
+      });
+      document.getElementById('selectedMeta').textContent = selected.length + ' course(s) selected | ' + totalCredits + ' total credits';
+      document.getElementById('selectedCoursesList').innerHTML = selectedList.join('');
+    }
+
+    const regForm = document.getElementById('courseRegistrationForm');
+    const regMsg = document.getElementById('registrationMessage');
+    regForm.addEventListener('submit', async function (e) {
+      e.preventDefault();
+      const selected = Array.from(document.querySelectorAll('input[name="courseIds"]:checked')).map(function (cb) { return cb.value; });
+      if (selected.length === 0) {
+        regMsg.textContent = 'Please select at least one course.';
+        regMsg.className = 'form-message error';
+        return;
+      }
+      const result = await SMSStore.registerCourses({
+        studentIdentifier: document.getElementById('studentIdentifier').value.trim(),
+        password: document.getElementById('password').value,
+        term: document.getElementById('term').value.trim(),
+        courseIds: selected
+      });
+      if (result.ok) {
+        regMsg.textContent = result.message;
+        regMsg.className = 'form-message success';
+        document.querySelectorAll('input[name="courseIds"]').forEach(function (cb) { cb.checked = false; });
+        updateSelectedSummary();
+      } else {
+        regMsg.textContent = result.message;
+        regMsg.className = 'form-message error';
+      }
+    });
+  </script>
+</body>
+</html>

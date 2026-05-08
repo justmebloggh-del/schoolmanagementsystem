@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Careers | Ghana School Management Platform</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-page="careers">
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="index.html">
+<span class="brand-mark"><img src="src/assets/images/gaffer-logo.png" alt="Logo" width="100"></span>
+      </a>
+      <button class="nav-toggle" aria-expanded="false" aria-label="Toggle navigation">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+      <nav class="site-nav" aria-label="Main">
+        <a href="index.html" data-nav="home">Home</a>
+        <a href="admissions.html" data-nav="admissions">Admissions</a>
+        <a href="careers.html" data-nav="careers">Careers</a>
+        <a href="student-login.html" data-nav="student-login">Student Login</a>
+        <a href="teacher-login.html" data-nav="teacher-login">Staff Login</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="section">
+    <div class="container">
+      <p class="eyebrow">Join Our Team</p>
+      <h1>Careers</h1>
+      <p>Explore career opportunities at schools using our platform.</p>
+
+      <div class="card-grid three" style="margin-top: 32px;">
+        <div class="action-card">
+          <i class="fa-solid fa-chalkboard-user"></i>
+          <h3>Teaching Positions</h3>
+          <p>Become a teacher and shape the future of students. Various subjects available.</p>
+          <button class="btn btn-primary" style="margin-top: 12px; width: auto;" onclick="applyFor('Teacher')">Apply Now</button>
+        </div>
+        <div class="action-card">
+          <i class="fa-solid fa-user-tie"></i>
+          <h3>Administrative Roles</h3>
+          <p>Join our administration team to help manage school operations efficiently.</p>
+          <button class="btn btn-primary" style="margin-top: 12px; width: auto;" onclick="applyFor('Administrator')">Apply Now</button>
+        </div>
+        <div class="action-card">
+          <i class="fa-solid fa-laptop-code"></i>
+          <h3>IT &amp; Technology</h3>
+          <p>Help schools embrace technology for better education delivery.</p>
+          <button class="btn btn-primary" style="margin-top: 12px; width: auto;" onclick="applyFor('IT Support')">Apply Now</button>
+        </div>
+        <div class="action-card">
+          <i class="fa-solid fa-calculator"></i>
+          <h3>Finance &amp; Accounting</h3>
+          <p>Manage school finances, fees, and budgets.</p>
+          <button class="btn btn-primary" style="margin-top: 12px; width: auto;" onclick="applyFor('Accountant')">Apply Now</button>
+        </div>
+        <div class="action-card">
+          <i class="fa-solid fa-book-atlas"></i>
+          <h3>Library Services</h3>
+          <p>Manage library resources and support student research.</p>
+          <button class="btn btn-primary" style="margin-top: 12px; width: auto;" onclick="applyFor('Librarian')">Apply Now</button>
+        </div>
+        <div class="action-card">
+          <i class="fa-solid fa-hands-helping"></i>
+          <h3>Support Staff</h3>
+          <p>Various support roles including counselors, nurses, and more.</p>
+          <button class="btn btn-primary" style="margin-top: 12px; width: auto;" onclick="applyFor('Counselor')">Apply Now</button>
+        </div>
+      </div>
+
+      <div class="panel" style="margin-top: 48px;">
+        <h2>Why Work With Us?</h2>
+        <ul class="stack-list">
+          <li><i class="fa-solid fa-check" style="color: var(--sea-500); margin-right: 8px;"></i> Competitive salaries and benefits</li>
+          <li><i class="fa-solid fa-check" style="color: var(--sea-500); margin-right: 8px;"></i> Professional development opportunities</li>
+          <li><i class="fa-solid fa-check" style="color: var(--sea-500); margin-right: 8px;"></i> Modern work environment</li>
+          <li><i class="fa-solid fa-check" style="color: var(--sea-500); margin-right: 8px;"></i> Work-life balance</li>
+          <li><i class="fa-solid fa-check" style="color: var(--sea-500); margin-right: 8px;"></i> Collaborative team culture</li>
+        </ul>
+      </div>
+
+      <div id="how-to-apply" class="panel" style="margin-top: 24px;">
+        <h2>How to Apply</h2>
+        <p>Select a position above or fill out the form below to apply for a job at your chosen school.</p>
+
+        <form id="jobApplicationForm" class="app-form" novalidate style="margin-top: 24px;">
+          <div class="field-grid">
+            <label class="full-width">
+              Select School *
+              <select name="schoolId" id="schoolSelect" required>
+                <option value="">Choose a school to apply to...</option>
+              </select>
+            </label>
+            <label class="full-width">
+              Select Position *
+              <select name="position" id="positionSelect" required>
+                <option value="">Choose a position...</option>
+                <option value="Teacher">Teacher</option>
+                <option value="Academic Officer">Academic Officer</option>
+                <option value="Administrator">Administrator</option>
+                <option value="IT Support">IT Support</option>
+                <option value="Accountant">Accountant</option>
+                <option value="Librarian">Librarian</option>
+                <option value="Counselor">Counselor</option>
+                <option value="Administrative Assistant">Administrative Assistant</option>
+                <option value="Lab Technician">Lab Technician</option>
+                <option value="Sports Coach">Sports Coach</option>
+                <option value="Nurse">School Nurse</option>
+                <option value="Security">Security Officer</option>
+                <option value="Cleaner">Cleaner</option>
+              </select>
+            </label>
+            <label>
+              Full Name *
+              <input type="text" name="fullName" required placeholder="Enter your full name">
+            </label>
+            <label>
+              Date of Birth *
+              <input type="date" name="dob" required>
+            </label>
+            <label>
+              Email *
+              <input type="email" name="email" required placeholder="your.email@example.com">
+            </label>
+            <label>
+              Phone *
+              <input type="tel" name="phone" required placeholder="+233 24 000 0000">
+            </label>
+            <label class="full-width">
+              Address *
+              <input type="text" name="address" required placeholder="Your residential address">
+            </label>
+            <label>
+              Highest Qualification *
+              <select name="qualification" required>
+                <option value="">Select Qualification</option>
+                <option value="PhD">PhD</option>
+                <option value="Master's Degree">Master's Degree</option>
+                <option value="Bachelor's Degree">Bachelor's Degree</option>
+                <option value="HND">HND</option>
+                <option value="Diploma">Diploma</option>
+                <option value="Certificate">Certificate</option>
+                <option value="SSSCE/WASSCE">SSSCE/WASSCE</option>
+              </select>
+            </label>
+            <label>
+              Years of Experience *
+              <input type="number" name="experience" min="0" required placeholder="0">
+            </label>
+            <label class="full-width">
+              Subject / Department of Interest *
+              <select name="department" required>
+                <option value="">Select Department</option>
+                <option value="Computer Science">Computer Science</option>
+                <option value="Mathematics">Mathematics</option>
+                <option value="English">English</option>
+                <option value="Science">Science</option>
+                <option value="Business">Business</option>
+                <option value="Accounting">Accounting</option>
+                <option value="Library">Library</option>
+                <option value="Administration">Administration</option>
+                <option value="IT">IT</option>
+                <option value="Sports">Sports</option>
+                <option value="Nursing">Nursing/Health</option>
+                <option value="Security">Security</option>
+                <option value="General">General</option>
+              </select>
+            </label>
+            <label class="full-width">
+              Upload CV/Resume *
+              <input type="file" name="cvFile" accept=".pdf,.doc,.docx,.jpg,.png" required>
+              <small style="color: var(--ink-500); font-size: 0.8rem;">Accepted formats: PDF, DOC, DOCX, JPG, PNG (Max 5MB)</small>
+            </label>
+            <label class="full-width">
+              Cover Letter / Additional Information
+              <textarea name="notes" rows="4" placeholder="Tell us about yourself and why you're the best candidate..."></textarea>
+            </label>
+          </div>
+          <button class="btn btn-primary" type="submit">Submit Application</button>
+          <p id="jobApplicationMessage" class="form-message" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>&copy; <span id="year"></span> Ghana School Management Platform</p>
+      <p>Career opportunities in education.</p>
+    </div>
+  </footer>
+
+  <script src="js/storage.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Pre-select position and scroll to form
+    function applyFor(position) {
+      var sel = document.getElementById('positionSelect');
+      for (var i = 0; i < sel.options.length; i++) {
+        if (sel.options[i].value === position) {
+          sel.selectedIndex = i;
+          break;
+        }
+      }
+      document.getElementById('how-to-apply').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    // Load schools into dropdown
+    async function loadSchools() {
+      try {
+        var response = await fetch('/api/schools');
+        var data = await response.json();
+        var select = document.getElementById('schoolSelect');
+        if (data.ok && data.schools && data.schools.length > 0) {
+          data.schools.forEach(function(school) {
+            var option = document.createElement('option');
+            option.value = school.id;
+            option.textContent = school.name + ' (' + school.email + ')';
+            option.dataset.name = school.name;
+            select.appendChild(option);
+          });
+          // Auto-select first school
+          if (data.schools.length === 1) {
+            select.selectedIndex = 1;
+          }
+        } else {
+          var option = document.createElement('option');
+          option.value = 'SCH-1001';
+          option.textContent = 'Greenfield College Ghana (admin@greenfield.edu.gh)';
+          option.dataset.name = 'Greenfield College Ghana';
+          select.appendChild(option);
+          select.selectedIndex = 1;
+        }
+      } catch (e) {
+        var select = document.getElementById('schoolSelect');
+        var option = document.createElement('option');
+        option.value = 'SCH-1001';
+        option.textContent = 'Greenfield College Ghana (admin@greenfield.edu.gh)';
+        option.dataset.name = 'Greenfield College Ghana';
+        select.appendChild(option);
+        select.selectedIndex = 1;
+      }
+    }
+    loadSchools();
+
+    // Open application form to a specific position if URL has #apply-<position>
+    if (window.location.hash && window.location.hash.startsWith('#apply-')) {
+      var pos = decodeURIComponent(window.location.hash.replace('#apply-', ''));
+      window.addEventListener('load', function() { applyFor(pos); });
+    }
+
+    function fileToBase64(file) {
+      return new Promise(function(resolve, reject) {
+        var reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = function() { resolve(reader.result); };
+        reader.onerror = function(error) { reject(error); };
+      });
+    }
+
+    var form = document.getElementById('jobApplicationForm');
+    var messageEl = document.getElementById('jobApplicationMessage');
+
+    form.addEventListener('submit', async function(e) {
+      e.preventDefault();
+
+      var schoolSelect = document.getElementById('schoolSelect');
+      var schoolId = schoolSelect.value;
+      var schoolName = schoolSelect.options[schoolSelect.selectedIndex] && schoolSelect.options[schoolSelect.selectedIndex].dataset.name || '';
+
+      if (!schoolId) {
+        messageEl.textContent = 'Please select a school to apply to.';
+        messageEl.className = 'form-message error';
+        return;
+      }
+
+      var fileInput = form.querySelector('input[type="file"]');
+      var file = fileInput.files[0];
+
+      if (!file) {
+        messageEl.textContent = 'Please upload your CV/Resume.';
+        messageEl.className = 'form-message error';
+        return;
+      }
+
+      if (file.size > 5 * 1024 * 1024) {
+        messageEl.textContent = 'File size must be less than 5MB.';
+        messageEl.className = 'form-message error';
+        return;
+      }
+
+      var formData = new FormData(form);
+
+      var cvBase64 = '';
+      try {
+        cvBase64 = await fileToBase64(file);
+      } catch (err) {
+        messageEl.textContent = 'Error reading file. Please try again.';
+        messageEl.className = 'form-message error';
+        return;
+      }
+
+      var payload = {
+        schoolId: schoolId,
+        schoolName: schoolName,
+        position: formData.get('position'),
+        fullName: (formData.get('fullName') || '').trim(),
+        dob: formData.get('dob'),
+        email: (formData.get('email') || '').trim(),
+        phone: (formData.get('phone') || '').trim(),
+        address: (formData.get('address') || '').trim(),
+        qualification: formData.get('qualification'),
+        experience: formData.get('experience'),
+        department: formData.get('department'),
+        cvFileName: file.name,
+        cvFileType: file.type,
+        cvData: cvBase64,
+        notes: (formData.get('notes') || '').trim()
+      };
+
+      if (!payload.position || !payload.fullName || !payload.dob || !payload.email || !payload.phone || !payload.address || !payload.qualification || !payload.experience || !payload.department) {
+        messageEl.textContent = 'Please fill in all required fields.';
+        messageEl.className = 'form-message error';
+        return;
+      }
+
+      var applications = JSON.parse(localStorage.getItem('jobApplications') || '[]');
+      var jobId = 'JOB-' + Date.now();
+      applications.push(Object.assign({}, payload, {
+        id: jobId,
+        submittedOn: new Date().toISOString().split('T')[0],
+        submittedAt: new Date().toISOString(),
+        status: 'pending'
+      }));
+      localStorage.setItem('jobApplications', JSON.stringify(applications));
+
+      try {
+        await fetch('/api/job-applications', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'X-School-ID': schoolId },
+          body: JSON.stringify(payload)
+        });
+      } catch (e) {}
+
+      messageEl.innerHTML = 'Application submitted successfully to <strong>' + schoolName + '</strong>! Reference: ' + jobId;
+      messageEl.className = 'form-message success';
+      form.reset();
+      loadSchools();
+    });
+  </script>
+</body>
+</html>
