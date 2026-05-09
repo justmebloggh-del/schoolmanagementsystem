@@ -396,6 +396,13 @@
     });
   }
 
+  async function resetStaffPassword(staffId) {
+    return request('/api/staff/' + encodeURIComponent(staffId) + '/reset-password', {
+      method: 'POST',
+      body: JSON.stringify({})
+    });
+  }
+
   // ============ JOB APPLICATION ACTIONS ============
 
   async function shortlistJobApplication(jobId) {
@@ -599,6 +606,7 @@
     addStaff,
     addStudent,
     toggleStaff,
+    resetStaffPassword,
 
     // Student lifecycle
     toggleStudent,

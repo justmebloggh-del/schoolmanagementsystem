@@ -270,7 +270,68 @@
     }
   }
 
-  // ── 6. STAFF ─────────────────────────────────────────────────────────────────
+  // ── CREDENTIAL BOX ───────────────────────────────────────────────────────────
+
+  function showCredBox(boxId, id, password, type) {
+    var box = byId(boxId);
+    if (!box) return;
+    var label = type === 'staff' ? 'Staff' : 'Student';
+    var idLabel = type === 'staff' ? 'Staff ID' : 'Student ID';
+    box.style.display = 'block';
+    box.innerHTML =
+      '<div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:1rem;margin-top:0.75rem">' +
+      '<p style="font-weight:600;color:#15803d;margin:0 0 0.5rem"><i class="fa-solid fa-circle-check"></i> ' + label + ' login created successfully</p>' +
+      '<table style="border:none;font-size:0.875rem"><tbody>' +
+      '<tr><td style="padding:3px 12px 3px 0;color:#374151">' + idLabel + ':</td><td><code style="background:#dcfce7;padding:2px 6px;border-radius:4px;font-weight:600">' + escapeHtml(id) + '</code></td></tr>' +
+      '<tr><td style="padding:3px 12px 3px 0;color:#374151">Password:</td><td><code style="background:#dcfce7;padding:2px 6px;border-radius:4px;font-weight:600">' + escapeHtml(password) + '</code></td></tr>' +
+      '</tbody></table>' +
+      '<p style="font-size:0.78rem;color:#6b7280;margin:0.5rem 0 0">Share these with the ' + label.toLowerCase() + '. They can update their password after logging in.</p>' +
+      '</div>';
+  }
+
+  // ── 6. REGISTRATIONS ─────────────────────────────────────────────────────────
+
+  function renderRegistrations(data, searchValue) {
+    var tbody = byId('registrationsTableBody');
+    if (!tbody) return;
+
+    var studentMap = {};
+    data.students.forEach(function (s) { studentMap[s.id] = s; });
+    var courseMap = {};
+    data.courses.forEach(function (c) { courseMap[c.id] = c; });
+
+    var regs = data.registrations || [];
+    var query = (searchValue || '').trim().toLowerCase();
+    if (query) {
+      regs = regs.filter(function (r) {
+        var s = studentMap[r.studentId];
+        return [r.studentId, s ? s.name : '', r.term].join(' ').toLowerCase().indexOf(query) !== -1;
+      });
+    }
+
+    if (!regs.length) {
+      tbody.innerHTML = '<tr><td colspan="4" class="empty">No registrations found.</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = regs.map(function (r) {
+      var s = studentMap[r.studentId];
+      var courseCodes = (r.courseIds || []).map(function (cid) {
+        var c = courseMap[cid];
+        return c ? c.code : cid;
+      });
+      return '<tr>' +
+        '<td><strong>' + escapeHtml(s ? s.name : r.studentId) + '</strong>' +
+          (s ? '<br><small style="color:#9ca3af">' + escapeHtml(r.studentId) + ' | ' + escapeHtml(s.program) + ' L' + escapeHtml(s.level) + '</small>' : '') +
+        '</td>' +
+        '<td>' + escapeHtml(r.term) + '</td>' +
+        '<td style="font-size:0.82rem">' + escapeHtml(courseCodes.join(', ') || '—') + '</td>' +
+        '<td style="white-space:nowrap">' + escapeHtml(r.registeredOn) + '</td>' +
+        '</tr>';
+    }).join('');
+  }
+
+  // ── 7. STAFF ─────────────────────────────────────────────────────────────────
 
   function renderStaff(data) {
     const tbody = byId("staffTableBody");
@@ -289,7 +350,8 @@
               "<td class=\"action-cell\">" +
                 "<button class=\"btn btn-xs " + (isActive ? "btn-warning" : "btn-success") + " staff-toggle\" data-id=\"" + escapeHtml(s.id) + "\">" +
                   (isActive ? "Suspend" : "Activate") +
-                "</button>" +
+                "</button> " +
+                "<button class=\"btn btn-xs btn-secondary staff-reset\" data-id=\"" + escapeHtml(s.id) + "\" title=\"Reset to Staff@123\">Reset PW</button>" +
               "</td>" +
               "</tr>"
             );
@@ -553,6 +615,7 @@
     renderCourses(data);
     renderAttendanceStudents(data);
     renderStaff(data);
+    renderRegistrations(data, "");
     renderExamResults(data);
     return data;
   }
@@ -704,7 +767,8 @@
         });
         if (!result.ok) { setMessage("staffMessage", result.message, true); return; }
         staffForm.reset();
-        setMessage("staffMessage", "Staff account created: " + result.staffId + " | password: " + result.defaultPassword, false);
+        setMessage("staffMessage", "", false);
+        showCredBox("staffCredBox", result.staffId, result.defaultPassword, "staff");
         await refreshDashboard(search ? search.value : "");
       });
     }
@@ -712,11 +776,29 @@
     const staffTable = byId("staffTableBody");
     if (staffTable) {
       staffTable.addEventListener("click", async function (e) {
-        const btn = e.target.closest(".staff-toggle");
-        if (!btn) return;
-        const result = await SMSStore.toggleStaff(btn.dataset.id);
-        if (!result.ok) { window.alert(result.message); return; }
-        await refreshDashboard(search ? search.value : "");
+        const toggleBtn = e.target.closest(".staff-toggle");
+        if (toggleBtn) {
+          const result = await SMSStore.toggleStaff(toggleBtn.dataset.id);
+          if (!result.ok) { window.alert(result.message); return; }
+          await refreshDashboard(search ? search.value : "");
+          return;
+        }
+        const resetBtn = e.target.closest(".staff-reset");
+        if (resetBtn) {
+          if (!window.confirm("Reset this staff member's password to Staff@123?")) return;
+          const result = await SMSStore.resetStaffPassword(resetBtn.dataset.id);
+          window.alert(result.message);
+          return;
+        }
+      });
+    }
+
+    // Registration search
+    const regSearch = byId("regSearch");
+    if (regSearch) {
+      regSearch.addEventListener("input", async function () {
+        const data = await SMSStore.getData();
+        renderRegistrations(data, regSearch.value);
       });
     }
 
@@ -736,7 +818,8 @@
         });
         if (!result.ok) { setMessage("studentMessage", result.message, true); return; }
         studentForm.reset();
-        setMessage("studentMessage", "Student login created: " + result.studentId + " | password: " + result.defaultPassword, false);
+        setMessage("studentMessage", "", false);
+        showCredBox("studentCredBox", result.studentId, result.defaultPassword, "student");
         await refreshDashboard(search ? search.value : "");
       });
     }

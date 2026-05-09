@@ -336,6 +336,15 @@ async function handleAddStaff(req, res) {
   res.json({ ok: true, message: 'Staff account created.', staffId, defaultPassword: password });
 }
 
+async function handleResetStaffPassword(req, res, staffId) {
+  const school = await requireSchool(req, res);
+  if (!school) return;
+  const { data } = await db.from('sms_staff').select('id').eq('id', staffId).eq('school_id', school.id).single();
+  if (!data) return res.status(404).json({ ok: false, message: 'Staff not found.' });
+  await db.from('sms_staff').update({ password: 'Staff@123' }).eq('id', staffId);
+  res.json({ ok: true, message: 'Staff password reset to Staff@123.' });
+}
+
 async function handleToggleStaff(req, res, staffId) {
   const school = await requireSchool(req, res);
   if (!school) return;
@@ -623,7 +632,8 @@ module.exports = async function handler(req, res) {
     if (m === 'POST' && slug[0] === 'students' && slug[2] === 'reset-password') return handleResetStudentPassword(req, res, slug[1]);
     if (m === 'POST' && path === '/staff')                         return handleAddStaff(req, res);
     if (m === 'GET'  && (slug[0] === 'staff' || slug[0] === 'teachers') && slug.length === 2) return handleGetStaff(req, res, slug[1]);
-    if (m === 'POST' && slug[0] === 'staff' && slug[2] === 'toggle') return handleToggleStaff(req, res, slug[1]);
+    if (m === 'POST' && slug[0] === 'staff' && slug[2] === 'toggle')          return handleToggleStaff(req, res, slug[1]);
+    if (m === 'POST' && slug[0] === 'staff' && slug[2] === 'reset-password') return handleResetStaffPassword(req, res, slug[1]);
     if (m === 'POST' && path === '/courses')                       return handleAddCourse(req, res);
     if (m === 'POST' && slug[0] === 'courses' && slug[2] === 'toggle') return handleToggleCourse(req, res, slug[1]);
     if (m === 'POST' && path === '/attendance')                    return handleAttendance(req, res);
