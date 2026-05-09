@@ -50,7 +50,27 @@
         </form>
         <div class="panel sub-panel">
           <p>No account yet? <a href="school-auth.html">Create a school account</a> — admin credentials are generated automatically.</p>
-          <p><a href="school-auth.html">Switch school workspace</a></p>
+          <p style="margin-top:0.5rem"><a href="#" id="showRecoveryBtn" style="color:#dc2626;font-size:0.875rem">Forgot admin credentials?</a> &nbsp;|&nbsp; <a href="school-auth.html" style="font-size:0.875rem">Switch school</a></p>
+        </div>
+
+        <!-- Recovery section (hidden by default) -->
+        <div id="recoverySection" style="display:none;margin-top:1.25rem;padding:1.25rem;background:#fef9f0;border:1px solid #fed7aa;border-radius:10px">
+          <h3 style="font-size:1rem;margin-bottom:0.25rem">Recover Admin Access</h3>
+          <p style="font-size:0.85rem;color:#6b7280;margin-bottom:1rem">Enter your <strong>school password</strong> (the one you used when creating the school account). The admin password will be reset to <code>Staff@123</code> and your admin email will be shown.</p>
+          <form id="recoveryForm" class="app-form" novalidate>
+            <label style="font-size:0.875rem">
+              School Password
+              <input type="password" name="schoolPassword" required placeholder="Your school account password">
+            </label>
+            <button type="submit" class="btn btn-secondary full">Reset Admin Credentials</button>
+            <p id="recoveryMessage" class="form-message" role="status" aria-live="polite"></p>
+          </form>
+          <div id="recoveryResult" style="display:none;margin-top:1rem;padding:0.875rem;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;font-size:0.875rem">
+            <p style="font-weight:600;color:#15803d;margin-bottom:0.5rem"><i class="fa-solid fa-circle-check"></i> Admin credentials recovered</p>
+            <p style="margin-bottom:0.25rem">Email: <strong id="recoveredEmail"></strong></p>
+            <p style="margin-bottom:0.25rem">Staff ID: <strong id="recoveredId"></strong></p>
+            <p style="margin-bottom:0">Password: <strong>Staff@123</strong></p>
+          </div>
         </div>
       </div>
     </div>
@@ -120,6 +140,45 @@
       setTimeout(function () {
         window.location.href = 'admin-dashboard.html';
       }, 800);
+    });
+
+    // Recovery toggle
+    document.getElementById('showRecoveryBtn').addEventListener('click', function (e) {
+      e.preventDefault();
+      var sec = document.getElementById('recoverySection');
+      sec.style.display = sec.style.display === 'none' ? 'block' : 'none';
+    });
+
+    // Recovery form submit
+    document.getElementById('recoveryForm').addEventListener('submit', async function (e) {
+      e.preventDefault();
+      var schoolPassword = this.querySelector('[name="schoolPassword"]').value;
+      var msgEl = document.getElementById('recoveryMessage');
+      var resultEl = document.getElementById('recoveryResult');
+      msgEl.textContent = 'Verifying...';
+      msgEl.className = 'form-message';
+      resultEl.style.display = 'none';
+
+      var res = await fetch('/api/schools/recover-admin', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-School-ID': localStorage.getItem('sms_current_school') || ''
+        },
+        body: JSON.stringify({ schoolPassword: schoolPassword })
+      });
+      var data = await res.json();
+
+      if (!data.ok) {
+        msgEl.textContent = data.message;
+        msgEl.className = 'form-message error';
+        return;
+      }
+
+      msgEl.textContent = '';
+      document.getElementById('recoveredEmail').textContent = data.adminEmail;
+      document.getElementById('recoveredId').textContent    = data.adminId;
+      resultEl.style.display = 'block';
     });
   </script>
 </body>

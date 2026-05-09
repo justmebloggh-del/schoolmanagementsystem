@@ -565,6 +565,33 @@ async function handleUpdateJobApplication(req, res, jobId, newStatus) {
   res.json({ ok: true, status: newStatus, message: `Application ${newStatus}.` });
 }
 
+async function handleRecoverAdmin(req, res) {
+  const school = await requireSchool(req, res);
+  if (!school) return;
+
+  const { schoolPassword } = req.body;
+  if (!schoolPassword) return res.status(400).json({ ok: false, message: 'School password required.' });
+  if (school.password !== schoolPassword)
+    return res.status(401).json({ ok: false, message: 'Incorrect school password.' });
+
+  const { data: rows } = await db
+    .from('sms_staff')
+    .select('*')
+    .eq('school_id', school.id)
+    .ilike('role', '%admin%')
+    .order('created_at', { ascending: true })
+    .limit(1);
+
+  if (!rows || !rows.length)
+    return res.status(404).json({ ok: false, message: 'No admin staff found for this school. Please contact support.' });
+
+  const admin = rows[0];
+  const newPass = 'Staff@123';
+  await db.from('sms_staff').update({ password: newPass }).eq('id', admin.id);
+
+  res.json({ ok: true, message: 'Admin password reset.', adminEmail: admin.email, adminId: admin.id, newPassword: newPass });
+}
+
 // ── MAIN ROUTER ──────────────────────────────────────────────────────────────
 
 module.exports = async function handler(req, res) {
@@ -583,6 +610,7 @@ module.exports = async function handler(req, res) {
     if (m === 'GET'  && path === '/schools')                       return handleGetSchools(req, res);
     if (m === 'POST' && path === '/schools/register')              return handleSchoolRegister(req, res);
     if (m === 'POST' && path === '/schools/login')                 return handleSchoolLogin(req, res);
+    if (m === 'POST' && path === '/schools/recover-admin')         return handleRecoverAdmin(req, res);
     if (m === 'GET'  && path.startsWith('/schools/'))              return handleGetSchool(req, res, slug[1]);
     if (m === 'GET'  && path === '/data')                          return handleGetData(req, res);
     if (m === 'POST' && path === '/admissions')                    return handleAdmissions(req, res);
