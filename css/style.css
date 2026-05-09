@@ -557,6 +557,7 @@ textarea:focus {
 
 .tab-panel.active {
   display: block;
+  min-height: 60vh;
 }
 
 .sub-panel {

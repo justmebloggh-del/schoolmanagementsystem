@@ -55,6 +55,17 @@
     document.querySelectorAll(".tab-panel").forEach(function (p) {
       p.classList.toggle("active", p.id === "tab-" + tab);
     });
+    // On mobile the sidebar stacks above the content and is not sticky.
+    // Switching tabs can shrink the page height causing the browser to snap
+    // the viewport back to the site header. Scrolling the content section
+    // into view keeps the user anchored to the tab content, not the header.
+    var content = document.querySelector(".dashboard-content");
+    if (content) {
+      var rect = content.getBoundingClientRect();
+      if (rect.top < 0) {
+        content.scrollIntoView({ block: "start" });
+      }
+    }
   }
 
   // ── 1. OVERVIEW ─────────────────────────────────────────────────────────────
@@ -980,5 +991,13 @@
     if (hashTab === "job-applications") renderJobApplications();
   }
 
-  document.addEventListener("DOMContentLoaded", function () { init(); });
+  document.addEventListener("DOMContentLoaded", function () {
+    // Block any form from causing a page reload on the dashboard.
+    // All forms are handled via JavaScript; this prevents accidental submits
+    // if a handler fires before bindEvents() completes.
+    if (["dashboard", "admin-dashboard"].includes(document.body.dataset.page || "")) {
+      document.addEventListener("submit", function (e) { e.preventDefault(); }, true);
+    }
+    init();
+  });
 })();
