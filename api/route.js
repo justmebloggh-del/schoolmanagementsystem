@@ -205,7 +205,7 @@ async function handleStaffLogin(req, res) {
   if (staff.status !== 'active')
     return res.status(403).json({ ok: false, message: 'Account suspended.' });
 
-  res.json({ ok: true, staff: { id: staff.id, name: staff.name, email: staff.email, role: staff.role, department: staff.department, status: staff.status } });
+  res.json({ ok: true, staff: { id: staff.id, name: staff.name, email: staff.email, role: staff.role, department: staff.department, status: staff.status, schoolId: staff.school_id } });
 }
 
 async function handleGetStudent(req, res, studentId) {

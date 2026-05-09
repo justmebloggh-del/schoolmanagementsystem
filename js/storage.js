@@ -257,6 +257,7 @@
 
     if (!result.ok) return result;
     localStorage.setItem(CURRENT_STAFF_KEY, result.staff.id);
+    if (result.staff.schoolId) setSchoolId(result.staff.schoolId);
     return result;
   }
 
