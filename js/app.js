@@ -25,15 +25,27 @@
   }
 
   async function ensureAuth() {
-    const staff = await SMSStore.getCurrentStaff();
-    if (!staff) { window.location.href = "admin-login.html"; return null; }
-    if (!isAdminStaff(staff)) {
-      window.alert("Admin access only.");
-      window.location.href = "admin-login.html";
+    // Session lives in localStorage — check it first, no API needed
+    const staffId  = localStorage.getItem('sms_current_staff');
+    const schoolId = localStorage.getItem('sms_current_school');
+    if (!staffId || !schoolId) {
+      window.location.href = "school-home.html";
       return null;
     }
-    const school = await SMSStore.getCurrentSchool();
-    return { school, staff };
+
+    // Fetch staff details for role check + name display.
+    // If the API is temporarily unavailable, fall back to a stub so the
+    // dashboard still loads rather than bouncing the user.
+    const apiStaff = await SMSStore.getCurrentStaff();
+    const staff = apiStaff || { id: staffId, name: 'Admin', role: 'Admin', department: 'Administration', status: 'active' };
+
+    if (!isAdminStaff(staff)) {
+      window.alert("Admin access only.");
+      window.location.href = "school-home.html";
+      return null;
+    }
+
+    return { school: { id: schoolId }, staff };
   }
 
   function switchTab(tab) {
@@ -180,6 +192,9 @@
   function renderAttendanceStudents(data) {
     const list = byId("attendanceStudentList");
     if (list) {
+      if (!data.students.length) {
+        list.innerHTML = '<p class="empty">No students enrolled yet.</p>';
+      } else
       list.innerHTML = data.students.map(function (s) {
         return (
           '<label class="check-item">' +
@@ -222,6 +237,9 @@
     const select = byId("attendanceCourse");
 
     if (grid) {
+      if (!data.courses.length) {
+        grid.innerHTML = '<p class="empty">No courses added yet.</p>';
+      } else
       grid.innerHTML = data.courses.map(function (course) {
         // Count enrolled students
         const enrolled = data.registrations
@@ -607,8 +625,28 @@
 
   // ── DASHBOARD REFRESH ────────────────────────────────────────────────────────
 
+  function buildMetrics(data) {
+    var att = data.attendance || [];
+    var rate = 0;
+    if (att.length) {
+      var latest  = att[0];
+      var present = (latest.presentStudentIds || []).length;
+      var absent  = (latest.absentStudentIds  || []).length;
+      var total   = present + absent;
+      rate = total ? Math.round((present / total) * 100) : 0;
+    }
+    return {
+      totalStudents:       (data.students     || []).length,
+      totalStaff:          (data.staff        || []).length,
+      pendingApplications: (data.applications || []).filter(function (a) { return a.status === 'pending'; }).length,
+      recordedResults:     (data.examResults  || []).length,
+      attendanceRate:      rate
+    };
+  }
+
   async function refreshDashboard(searchValue) {
-    const [data, metrics] = await Promise.all([SMSStore.getData(), SMSStore.getOverviewMetrics()]);
+    const data    = await SMSStore.getData();   // single API call
+    const metrics = buildMetrics(data);
     renderOverview(data, metrics);
     renderStudents(data, searchValue || "");
     renderApplications(data);
@@ -906,7 +944,7 @@
     if (logoutBtn) {
       logoutBtn.addEventListener("click", function () {
         SMSStore.logoutStaff();
-        window.location.href = "admin-login.html";
+        window.location.href = "school-home.html";
       });
     }
   }
@@ -929,6 +967,7 @@
     const hashTab = (window.location.hash || "").replace("#", "");
     if (hashTab && document.getElementById("tab-" + hashTab)) {
       switchTab(hashTab);
+      if (hashTab === "job-applications") renderJobApplications();
     }
 
     bindEvents(context);

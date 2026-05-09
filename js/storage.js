@@ -210,10 +210,7 @@
     if (!schoolId) return null;
 
     const result = await request('/api/schools/' + encodeURIComponent(schoolId));
-    if (!result.ok) {
-      localStorage.removeItem(CURRENT_SCHOOL_KEY);
-      return null;
-    }
+    if (!result.ok) return null; // Don't wipe localStorage on transient API failure
     return result.school;
   }
 

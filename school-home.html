@@ -406,77 +406,86 @@
       document.getElementById('year').textContent = new Date().getFullYear();
 
       // nav toggle
-      const toggle = document.querySelector('.nav-toggle');
-      const nav = document.querySelector('.site-nav');
+      var toggle = document.querySelector('.nav-toggle');
+      var nav = document.querySelector('.site-nav');
       if (toggle && nav) {
         toggle.addEventListener('click', function () {
-          const open = nav.classList.toggle('open');
+          var open = nav.classList.toggle('open');
           toggle.setAttribute('aria-expanded', String(open));
         });
       }
 
-      const school = await SMSStore.getCurrentSchool();
-
-      if (!school) {
+      // Session lives in localStorage — use it as the gate, not an API call
+      var schoolId = localStorage.getItem('sms_current_school');
+      if (!schoolId) {
         document.getElementById('noSchoolBanner').style.display = 'block';
         return;
       }
 
-      // Show hero
-      const hero = document.getElementById('schoolHero');
-      hero.style.display = 'block';
-      document.getElementById('schoolHeroName').textContent = school.name;
+      // Show the page immediately with placeholder text
+      document.getElementById('schoolHero').style.display = 'block';
       document.getElementById('mainContent').style.display = 'block';
+      document.getElementById('schoolHeroName').textContent = 'Loading…';
+      document.getElementById('infoId').textContent = schoolId;
 
-      // Hero meta
-      const metaEmail = document.getElementById('metaEmail');
-      metaEmail.querySelector('span').textContent = school.email || '';
+      // Fetch full school details from API (non-blocking — page already visible)
+      var school = null;
+      try { school = await SMSStore.getCurrentSchool(); } catch (e) { /* ignore */ }
 
-      if (school.phone) {
-        const mp = document.getElementById('metaPhone');
-        mp.style.display = 'flex';
-        mp.querySelector('span').textContent = school.phone;
-      }
-      if (school.address) {
-        const ma = document.getElementById('metaAddress');
-        ma.style.display = 'flex';
-        ma.querySelector('span').textContent = school.address;
-      }
-
-      // Side info
-      document.getElementById('infoName').textContent    = school.name;
-      document.getElementById('infoEmail').textContent   = school.email || '—';
-      document.getElementById('infoId').textContent      = school.id;
-
-      if (school.phone) {
-        document.getElementById('infoPhone').textContent = school.phone;
+      if (school) {
+        document.getElementById('schoolHeroName').textContent = school.name;
+        document.getElementById('infoName').textContent  = school.name;
+        document.getElementById('infoEmail').textContent = school.email || '—';
+        document.getElementById('metaEmail').querySelector('span').textContent = school.email || '';
+        if (school.phone) {
+          document.getElementById('metaPhone').style.display = 'flex';
+          document.getElementById('metaPhone').querySelector('span').textContent = school.phone;
+          document.getElementById('infoPhone').textContent = school.phone;
+        } else {
+          document.getElementById('infoPhoneRow').style.display = 'none';
+        }
+        if (school.address) {
+          document.getElementById('metaAddress').style.display = 'flex';
+          document.getElementById('metaAddress').querySelector('span').textContent = school.address;
+          document.getElementById('infoAddress').textContent = school.address;
+        } else {
+          document.getElementById('infoAddressRow').style.display = 'none';
+        }
       } else {
-        document.getElementById('infoPhoneRow').style.display = 'none';
-      }
-      if (school.address) {
-        document.getElementById('infoAddress').textContent = school.address;
-      } else {
+        // API unavailable — show school ID as identifier
+        document.getElementById('schoolHeroName').textContent = 'School ' + schoolId;
+        document.getElementById('infoName').textContent  = 'School ' + schoolId;
+        document.getElementById('infoEmail').textContent = '—';
+        document.getElementById('infoPhoneRow').style.display   = 'none';
         document.getElementById('infoAddressRow').style.display = 'none';
       }
 
-      // Load metrics + announcements
+      // Load stats + announcements — single API call
+      var annList = document.getElementById('sideAnnouncementList');
       try {
-        const [metrics, data] = await Promise.all([SMSStore.getOverviewMetrics(), SMSStore.getData()]);
-        document.getElementById('statStudents').textContent     = metrics.totalStudents      ?? '0';
-        document.getElementById('statStaff').textContent        = metrics.totalStaff         ?? '0';
-        document.getElementById('statApplications').textContent = metrics.pendingApplications ?? '0';
-        const activeCourses = data.courses ? data.courses.filter(function(c){ return c.active; }).length : 0;
-        document.getElementById('statCourses').textContent      = activeCourses;
-        const annList = document.getElementById('sideAnnouncementList');
-        if (data.announcements && data.announcements.length) {
-          annList.innerHTML = data.announcements.slice(0, 5).map(function (a) {
-            return '<div class="announcement-item"><div class="ann-date">' + a.createdAt + '</div><strong>' + a.title + '</strong></div>';
+        var data = await SMSStore.getData();
+        var students     = data.students     || [];
+        var staff        = data.staff        || [];
+        var applications = data.applications || [];
+        var courses      = data.courses      || [];
+        var announcements = data.announcements || [];
+        document.getElementById('statStudents').textContent     = students.length;
+        document.getElementById('statStaff').textContent        = staff.length;
+        document.getElementById('statApplications').textContent = applications.filter(function(a){ return a.status === 'pending'; }).length;
+        document.getElementById('statCourses').textContent      = courses.filter(function(c){ return c.active; }).length;
+        if (announcements.length) {
+          annList.innerHTML = announcements.slice(0, 5).map(function (a) {
+            return '<div class="announcement-item"><div class="ann-date">' + (a.createdAt || '') + '</div><strong>' + (a.title || '') + '</strong></div>';
           }).join('');
         } else {
           annList.innerHTML = '<p style="color:#9ca3af;font-size:0.85rem">No announcements yet.</p>';
         }
       } catch (e) {
-        // non-fatal — stats stay as dashes
+        document.getElementById('statStudents').textContent     = '0';
+        document.getElementById('statStaff').textContent        = '0';
+        document.getElementById('statApplications').textContent = '0';
+        document.getElementById('statCourses').textContent      = '0';
+        annList.innerHTML = '<p style="color:#9ca3af;font-size:0.85rem">Could not load data.</p>';
       }
     })();
   </script>
