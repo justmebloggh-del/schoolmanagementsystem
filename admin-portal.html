@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Portal | Ghana School Management Platform</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* ── Portal hero ── */
+    .portal-hero {
+      padding: 36px 0 28px;
+      border-bottom: 1px solid rgba(92,116,137,.12);
+      margin-bottom: 28px;
+    }
+    .portal-hero-inner {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    .portal-hero-text .eyebrow {
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--sea-500);
+      margin-bottom: 6px;
+    }
+    .portal-hero-text h1 {
+      font-size: 2rem;
+      margin-bottom: 6px;
+    }
+    .portal-hero-text p { color: var(--ink-500); margin: 0; }
+    .portal-hero-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+      margin-top: 4px;
+    }
+    /* ── Stats strip ── */
+    .portal-stats {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 12px;
+      margin-bottom: 32px;
+    }
+    .p-stat {
+      background: #fff;
+      border: 1px solid rgba(92,116,137,.14);
+      border-radius: 12px;
+      padding: 14px 16px;
+      box-shadow: 0 2px 8px rgba(14,36,56,.05);
+    }
+    .p-stat label {
+      display: block;
+      font-size: 0.76rem;
+      color: var(--ink-500);
+      margin-bottom: 4px;
+      font-weight: 500;
+    }
+    .p-stat strong {
+      font-family: 'Sora', sans-serif;
+      font-size: 1.55rem;
+      color: var(--sea-700);
+    }
+    /* ── Section cards ── */
+    .sections-heading {
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: .07em;
+      text-transform: uppercase;
+      color: var(--ink-500);
+      margin-bottom: 16px;
+    }
+    .sections-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      padding-bottom: 60px;
+    }
+    .sec-card {
+      background: #fff;
+      border: 1px solid rgba(92,116,137,.14);
+      border-radius: 14px;
+      padding: 22px 22px 20px;
+      box-shadow: 0 2px 10px rgba(14,36,56,.06);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      transition: box-shadow .18s, transform .18s;
+      text-decoration: none;
+      color: inherit;
+    }
+    .sec-card:hover {
+      box-shadow: 0 8px 28px rgba(14,36,56,.13);
+      transform: translateY(-3px);
+    }
+    .sec-card-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 11px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+    }
+    .sec-card h3 {
+      font-size: 1.02rem;
+      margin: 0;
+      color: var(--ink-900);
+    }
+    .sec-card p {
+      font-size: 0.83rem;
+      color: var(--ink-500);
+      margin: 0;
+      line-height: 1.55;
+      flex: 1;
+    }
+    .sec-card-action {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--sea-700);
+      margin-top: 2px;
+    }
+    .sec-card-action i { font-size: 0.75rem; }
+    /* colour variants */
+    .ic-teal    { background: #ccfbf1; color: #0f766e; }
+    .ic-green   { background: #d1fae5; color: #065f46; }
+    .ic-amber   { background: #fef3c7; color: #92400e; }
+    .ic-purple  { background: #ede9fe; color: #5b21b6; }
+    .ic-rose    { background: #fce7f3; color: #9d174d; }
+    .ic-blue    { background: #dbeafe; color: #1e40af; }
+    .ic-emerald { background: #d1fae5; color: #064e3b; }
+    .ic-orange  { background: #ffedd5; color: #9a3412; }
+    .ic-lime    { background: #ecfccb; color: #365314; }
+
+    @media (max-width: 960px) {
+      .sections-grid { grid-template-columns: repeat(2, 1fr); }
+      .portal-stats  { grid-template-columns: repeat(3, 1fr); }
+    }
+    @media (max-width: 600px) {
+      .sections-grid { grid-template-columns: 1fr; }
+      .portal-stats  { grid-template-columns: repeat(2, 1fr); }
+      .portal-hero-text h1 { font-size: 1.5rem; }
+      .portal-hero-actions { flex-direction: column; width: 100%; }
+      .portal-hero-actions .btn { width: 100%; justify-content: center; }
+    }
+  </style>
+</head>
+<body data-page="admin-portal">
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="index.html">
+        <span class="brand-mark"><img src="src/assets/images/gaffer-logo.png" alt="Logo" width="100"></span>
+      </a>
+      <button class="nav-toggle" aria-expanded="false" aria-label="Toggle navigation">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+      <nav class="site-nav" aria-label="Main">
+        <a href="index.html" data-nav="home">Home</a>
+        <a href="admissions.html" data-nav="admissions">Admissions</a>
+        <a href="careers.html" data-nav="careers">Careers</a>
+        <a href="student-login.html" data-nav="student-login">Student Login</a>
+        <a href="teacher-login.html" data-nav="teacher-login">Staff Login</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+
+      <!-- Hero -->
+      <div class="portal-hero">
+        <div class="portal-hero-inner">
+          <div class="portal-hero-text">
+            <p class="eyebrow">Admin Portal</p>
+            <h1>Welcome, <span id="heroAdminName">Admin</span></h1>
+            <p id="heroSchoolName">Loading school…</p>
+          </div>
+          <div class="portal-hero-actions">
+            <a href="admin-dashboard.html" class="btn btn-secondary">
+              <i class="fa-solid fa-table-columns" style="margin-right:6px"></i>Full Dashboard
+            </a>
+            <button type="button" id="portalLogoutBtn" class="btn btn-secondary">
+              <i class="fa-solid fa-right-from-bracket" style="margin-right:6px"></i>Logout
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stats strip -->
+      <div class="portal-stats">
+        <div class="p-stat">
+          <label>Students</label>
+          <strong id="pStatStudents">—</strong>
+        </div>
+        <div class="p-stat">
+          <label>Staff</label>
+          <strong id="pStatStaff">—</strong>
+        </div>
+        <div class="p-stat">
+          <label>Pending Admissions</label>
+          <strong id="pStatApps">—</strong>
+        </div>
+        <div class="p-stat">
+          <label>Active Courses</label>
+          <strong id="pStatCourses">—</strong>
+        </div>
+        <div class="p-stat">
+          <label>Attendance Rate</label>
+          <strong id="pStatAttendance">—</strong>
+        </div>
+      </div>
+
+      <!-- Section cards -->
+      <p class="sections-heading">Manage sections</p>
+      <div class="sections-grid">
+
+        <a class="sec-card" href="admin-dashboard.html#overview">
+          <div class="sec-card-icon ic-teal">
+            <i class="fa-solid fa-gauge-high"></i>
+          </div>
+          <h3>Overview</h3>
+          <p>School-wide stats, recent admissions, exam results, and announcements.</p>
+          <span class="sec-card-action">Open overview <i class="fa-solid fa-arrow-right"></i></span>
+        </a>
+
+        <a class="sec-card" href="admin-dashboard.html#students">
+          <div class="sec-card-icon ic-green">
+            <i class="fa-solid fa-user-graduate"></i>
+          </div>
+          <h3>Student Files</h3>
+          <p>Create student logins, view profiles, suspend accounts, register for courses.</p>
+          <span class="sec-card-action">Manage students <i class="fa-solid fa-arrow-right"></i></span>
+        </a>
+
+        <a class="sec-card" href="admin-dashboard.html#applications">
+          <div class="sec-card-icon ic-amber">
+            <i class="fa-solid fa-file-circle-check"></i>
+          </div>
+          <h3>Admissions</h3>
+          <p>Review applications, approve to create student accounts, or reject.</p>
+          <span class="sec-card-action">Manage admissions <i class="fa-solid fa-arrow-right"></i></span>
+        </a>
+
+        <a class="sec-card" href="admin-dashboard.html#staff">
+          <div class="sec-card-icon ic-purple">
+            <i class="fa-solid fa-users"></i>
+          </div>
+          <h3>Staff Files</h3>
+          <p>Create staff logins with roles and passwords, suspend or reset access.</p>
+          <span class="sec-card-action">Manage staff <i class="fa-solid fa-arrow-right"></i></span>
+        </a>
+
+        <a class="sec-card" href="admin-dashboard.html#registrations">
+          <div class="sec-card-icon ic-rose">
+            <i class="fa-solid fa-book-open"></i>
+          </div>
+          <h3>Registrations</h3>
+          <p>View all student course registrations by term. Admin-register students directly.</p>
+          <span class="sec-card-action">View registrations <i class="fa-solid fa-arrow-right"></i></span>
+        </a>
+
+        <a class="sec-card" href="admin-dashboard.html#courses">
+          <div class="sec-card-icon ic-blue">
+            <i class="fa-solid fa-graduation-cap"></i>
+          </div>
+          <h3>Courses</h3>
+          <p>Add courses, set credits and seats, activate or deactivate offerings.</p>
+          <span class="sec-card-action">Manage courses <i class="fa-solid fa-arrow-right"></i></span>
+        </a>
+
+        <a class="sec-card" href="admin-dashboard.html#attendance">
+          <div class="sec-card-icon ic-emerald">
+            <i class="fa-solid fa-clipboard-check"></i>
+          </div>
+          <h3>Attendance</h3>
+          <p>Record daily attendance by course and view full attendance history.</p>
+          <span class="sec-card-action">Manage attendance <i class="fa-solid fa-arrow-right"></i></span>
+        </a>
+
+        <a class="sec-card" href="admin-dashboard.html#results">
+          <div class="sec-card-icon ic-orange">
+            <i class="fa-solid fa-chart-bar"></i>
+          </div>
+          <h3>Exam Results</h3>
+          <p>Record scores and grades per student and term. Delete incorrect entries.</p>
+          <span class="sec-card-action">Manage results <i class="fa-solid fa-arrow-right"></i></span>
+        </a>
+
+        <a class="sec-card" href="admin-dashboard.html#job-applications">
+          <div class="sec-card-icon ic-lime">
+            <i class="fa-solid fa-briefcase"></i>
+          </div>
+          <h3>Careers</h3>
+          <p>Review job applications from candidates. Shortlist or reject applicants.</p>
+          <span class="sec-card-action">Manage careers <i class="fa-solid fa-arrow-right"></i></span>
+        </a>
+
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>&copy; <span id="year"></span> Ghana School Management Platform</p>
+      <p>Admin portal — manage your school from one place.</p>
+    </div>
+  </footer>
+
+  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+  <script src="js/storage.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    (function () {
+      // ── Auth gate (synchronous, same as ensureAuth in app.js) ──────────────
+      var staffId   = localStorage.getItem('sms_current_staff');
+      var schoolId  = localStorage.getItem('sms_current_school');
+      var staffRole = localStorage.getItem('sms_current_staff_role') || 'Admin';
+      var staffName = localStorage.getItem('sms_current_staff_name') || 'Admin';
+
+      if (!staffId || !schoolId) {
+        window.location.href = 'school-home.html';
+        return;
+      }
+      if (staffRole && staffRole.toLowerCase().indexOf('admin') === -1) {
+        window.location.href = 'school-home.html';
+        return;
+      }
+
+      // ── Show admin name immediately ─────────────────────────────────────────
+      var nameEl = document.getElementById('heroAdminName');
+      if (nameEl) nameEl.textContent = staffName;
+
+      // ── Async: load school name + stats ────────────────────────────────────
+      (async function () {
+        // School name
+        try {
+          var school = await SMSStore.getCurrentSchool();
+          var schoolEl = document.getElementById('heroSchoolName');
+          if (schoolEl) schoolEl.textContent = school ? school.name : '';
+        } catch (e) {
+          var schoolEl = document.getElementById('heroSchoolName');
+          if (schoolEl) schoolEl.textContent = '';
+        }
+
+        // Stats
+        function setStat(id, val) {
+          var el = document.getElementById(id);
+          if (el) el.textContent = val;
+        }
+        try {
+          var data = await SMSStore.getData();
+          var att  = data.attendance || [];
+          var rate = 0;
+          if (att.length) {
+            var latest  = att[0];
+            var present = (latest.presentStudentIds || []).length;
+            var absent  = (latest.absentStudentIds  || []).length;
+            var total   = present + absent;
+            rate = total ? Math.round(present / total * 100) : 0;
+          }
+          setStat('pStatStudents',   (data.students    || []).length);
+          setStat('pStatStaff',      (data.staff       || []).length);
+          setStat('pStatApps',       (data.applications|| []).filter(function(a){ return a.status === 'pending'; }).length);
+          setStat('pStatCourses',    (data.courses     || []).filter(function(c){ return c.active; }).length);
+          setStat('pStatAttendance', rate + '%');
+        } catch (e) {
+          ['pStatStudents','pStatStaff','pStatApps','pStatCourses','pStatAttendance']
+            .forEach(function(id){ setStat(id, '—'); });
+        }
+      })();
+
+      // ── Logout ──────────────────────────────────────────────────────────────
+      document.getElementById('portalLogoutBtn').addEventListener('click', function () {
+        SMSStore.logoutSchool();
+        window.location.href = 'school-home.html';
+      });
+    })();
+  </script>
+</body>
+</html>
