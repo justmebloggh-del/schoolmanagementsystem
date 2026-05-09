@@ -55,17 +55,20 @@
     document.querySelectorAll(".tab-panel").forEach(function (p) {
       p.classList.toggle("active", p.id === "tab-" + tab);
     });
-    // On mobile the sidebar stacks above the content and is not sticky.
-    // Switching tabs can shrink the page height causing the browser to snap
-    // the viewport back to the site header. Scrolling the content section
-    // into view keeps the user anchored to the tab content, not the header.
-    var content = document.querySelector(".dashboard-content");
-    if (content) {
+    // After the DOM reflows, ensure the content area is visible.
+    // On mobile the sidebar sits above the content (not sticky) so switching
+    // tabs can collapse the page height and snap the viewport to the header.
+    // setTimeout(0) lets the browser finish layout before we check position.
+    setTimeout(function () {
+      var content = document.querySelector(".dashboard-content");
+      if (!content) return;
       var rect = content.getBoundingClientRect();
-      if (rect.top < 0) {
-        content.scrollIntoView({ block: "start" });
+      // Scroll content into view if it has slipped above (or barely below) the
+      // sticky header (roughly 80 px tall).
+      if (rect.top < 80) {
+        content.scrollIntoView({ block: "start", behavior: "instant" });
       }
-    }
+    }, 0);
   }
 
   // ── 1. OVERVIEW ─────────────────────────────────────────────────────────────
@@ -138,11 +141,11 @@
             "<td>" + escapeHtml(s.level) + "</td>" +
             "<td><span class=\"badge " + escapeHtml(s.status) + "\">" + escapeHtml(s.status) + "</span></td>" +
             "<td class=\"action-cell\">" +
-              "<button class=\"btn btn-xs btn-secondary stu-profile\" data-id=\"" + escapeHtml(s.id) + "\" title=\"View full profile\">Profile</button> " +
-              "<button class=\"btn btn-xs " + (isActive ? "btn-warning" : "btn-success") + " stu-toggle\" data-id=\"" + escapeHtml(s.id) + "\">" +
+              "<button type=\"button\" class=\"btn btn-xs btn-secondary stu-profile\" data-id=\"" + escapeHtml(s.id) + "\" title=\"View full profile\">Profile</button> " +
+              "<button type=\"button\" class=\"btn btn-xs " + (isActive ? "btn-warning" : "btn-success") + " stu-toggle\" data-id=\"" + escapeHtml(s.id) + "\">" +
                 (isActive ? "Suspend" : "Activate") +
               "</button> " +
-              "<button class=\"btn btn-xs btn-secondary stu-reset\" data-id=\"" + escapeHtml(s.id) + "\" title=\"Reset to Student@123\">Reset PW</button>" +
+              "<button type=\"button\" class=\"btn btn-xs btn-secondary stu-reset\" data-id=\"" + escapeHtml(s.id) + "\" title=\"Reset to Student@123\">Reset PW</button>" +
             "</td>" +
             "</tr>"
           );
@@ -173,8 +176,8 @@
     grid.innerHTML = data.applications.map(function (app) {
       const actions = app.status === "pending"
         ? '<div class="action-row">' +
-            '<button class="btn btn-primary app-action" data-action="approve" data-app-id="' + escapeHtml(app.id) + '">Approve → Create Student</button> ' +
-            '<button class="btn btn-danger app-action" data-action="reject" data-app-id="' + escapeHtml(app.id) + '">Reject</button>' +
+            '<button type="button" class="btn btn-primary app-action" data-action="approve" data-app-id="' + escapeHtml(app.id) + '">Approve → Create Student</button> ' +
+            '<button type="button" class="btn btn-danger app-action" data-action="reject" data-app-id="' + escapeHtml(app.id) + '">Reject</button>' +
           '</div>'
         : app.status === "approved"
           ? '<p style="color:var(--sea-700);font-weight:600">✓ Approved — student account created</p>'
@@ -267,7 +270,7 @@
           (enrolled ? "<p><strong>Enrolled:</strong> " + enrolled + " student(s)</p>" : "") +
           '<p><span class="badge ' + (course.active ? "active" : "inactive") + '">' +
             (course.active ? "Active" : "Inactive") + "</span></p>" +
-          '<button class="btn btn-secondary course-toggle" data-course-id="' + escapeHtml(course.id) + '">' +
+          '<button type="button" class="btn btn-secondary course-toggle" data-course-id="' + escapeHtml(course.id) + '">' +
             (course.active ? "Deactivate" : "Activate") + "</button>" +
           "</article>"
         );
@@ -377,10 +380,10 @@
               "<td>" + escapeHtml(s.department) + "</td>" +
               "<td><span class=\"badge " + escapeHtml(s.status) + "\">" + escapeHtml(s.status) + "</span></td>" +
               "<td class=\"action-cell\">" +
-                "<button class=\"btn btn-xs " + (isActive ? "btn-warning" : "btn-success") + " staff-toggle\" data-id=\"" + escapeHtml(s.id) + "\">" +
+                "<button type=\"button\" class=\"btn btn-xs " + (isActive ? "btn-warning" : "btn-success") + " staff-toggle\" data-id=\"" + escapeHtml(s.id) + "\">" +
                   (isActive ? "Suspend" : "Activate") +
                 "</button> " +
-                "<button class=\"btn btn-xs btn-secondary staff-reset\" data-id=\"" + escapeHtml(s.id) + "\" title=\"Reset to Staff@123\">Reset PW</button>" +
+                "<button type=\"button\" class=\"btn btn-xs btn-secondary staff-reset\" data-id=\"" + escapeHtml(s.id) + "\" title=\"Reset to Staff@123\">Reset PW</button>" +
               "</td>" +
               "</tr>"
             );
@@ -416,7 +419,7 @@
             "<td><strong>" + escapeHtml(r.grade) + "</strong></td>" +
             "<td>" + escapeHtml(r.recordedByName || r.recordedBy || "—") + "</td>" +
             "<td class=\"action-cell\">" +
-              "<button class=\"btn btn-xs btn-danger result-delete\" data-id=\"" + escapeHtml(r.id) + "\">Delete</button>" +
+              "<button type=\"button\" class=\"btn btn-xs btn-danger result-delete\" data-id=\"" + escapeHtml(r.id) + "\">Delete</button>" +
             "</td>" +
             "</tr>"
           );
@@ -447,8 +450,8 @@
         const isPending = app.status === "pending";
         const actions = isPending
           ? '<div class="action-row">' +
-              '<button class="btn btn-primary job-action" data-action="shortlist" data-job-id="' + escapeHtml(app.id) + '">Shortlist</button> ' +
-              '<button class="btn btn-danger job-action" data-action="reject" data-job-id="' + escapeHtml(app.id) + '">Reject</button>' +
+              '<button type="button" class="btn btn-primary job-action" data-action="shortlist" data-job-id="' + escapeHtml(app.id) + '">Shortlist</button> ' +
+              '<button type="button" class="btn btn-danger job-action" data-action="reject" data-job-id="' + escapeHtml(app.id) + '">Reject</button>' +
             '</div>'
           : app.status === "shortlisted"
             ? '<p style="color:var(--sea-700);font-weight:600">★ Shortlisted</p>'

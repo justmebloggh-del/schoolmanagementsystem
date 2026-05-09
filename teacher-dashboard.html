@@ -32,19 +32,20 @@
   <main class="section dashboard-wrap">
     <div class="container dashboard-layout">
       <aside class="dashboard-sidebar panel">
-        <h2>Admin Console</h2>
+        <a href="admin-portal.html" style="font-size:0.8rem;color:#6b7280;text-decoration:none;display:flex;align-items:center;gap:4px;margin-bottom:0.75rem"><i class="fa-solid fa-arrow-left"></i> Back to portal</a>
+        <h2>Staff Console</h2>
         <p id="dashboardUser"></p>
         <div class="tab-list" role="tablist" aria-label="Dashboard sections">
-          <button class="tab-btn active" data-tab="overview">Overview</button>
-          <button class="tab-btn" data-tab="students">Students</button>
-          <button class="tab-btn" data-tab="applications">Admissions</button>
-          <button class="tab-btn" data-tab="attendance">Attendance</button>
-          <button class="tab-btn" data-tab="courses">Courses</button>
-          <button class="tab-btn" data-tab="staff">Staff</button>
-          <button class="tab-btn" data-tab="results">Exam Results</button>
-          <button class="tab-btn" data-tab="reports">Reports</button>
+          <button class="tab-btn active" type="button" data-tab="overview">Overview</button>
+          <button class="tab-btn" type="button" data-tab="students">Students</button>
+          <button class="tab-btn" type="button" data-tab="applications">Admissions</button>
+          <button class="tab-btn" type="button" data-tab="attendance">Attendance</button>
+          <button class="tab-btn" type="button" data-tab="courses">Courses</button>
+          <button class="tab-btn" type="button" data-tab="staff">Staff</button>
+          <button class="tab-btn" type="button" data-tab="results">Exam Results</button>
+          <button class="tab-btn" type="button" data-tab="reports">Reports</button>
         </div>
-        <button id="logoutBtn" class="btn btn-secondary full">Logout Staff</button>
+        <button id="logoutBtn" type="button" class="btn btn-secondary full">Logout Staff</button>
       </aside>
 
       <section class="dashboard-content">
@@ -60,6 +61,7 @@
               <h3>Recent Exam Results</h3>
               <ul id="recentResults" class="stack-list"></ul>
             </div>
+          </div>
         </article>
 
         <article id="tab-students" class="tab-panel panel">
@@ -238,10 +240,10 @@
         <article id="tab-reports" class="tab-panel panel">
           <h2>Reports</h2>
           <div class="report-actions">
-            <button class="btn btn-secondary" data-report="students">Student Summary</button>
-            <button class="btn btn-secondary" data-report="attendance">Attendance Summary</button>
-            <button class="btn btn-secondary" data-report="results">Exam Results Summary</button>
-            <button class="btn btn-secondary" data-report="applications">Admissions Summary</button>
+            <button type="button" class="btn btn-secondary" data-report="students">Student Summary</button>
+            <button type="button" class="btn btn-secondary" data-report="attendance">Attendance Summary</button>
+            <button type="button" class="btn btn-secondary" data-report="results">Exam Results Summary</button>
+            <button type="button" class="btn btn-secondary" data-report="applications">Admissions Summary</button>
           </div>
           <div id="reportOutput" class="report-output"></div>
         </article>
