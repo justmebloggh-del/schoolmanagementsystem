@@ -176,9 +176,10 @@
 
     if (!result.ok) return result;
     setSchoolId(result.school.id);
-    // Auto-login as the newly created admin staff
     if (result.staffId) {
       localStorage.setItem(CURRENT_STAFF_KEY, result.staffId);
+      localStorage.setItem('sms_current_staff_name', result.adminName || payload.adminName || 'Admin');
+      localStorage.setItem('sms_current_staff_role', 'Admin');
     }
     return result;
   }
@@ -191,9 +192,10 @@
 
     if (!result.ok) return result;
     setSchoolId(result.school.id);
-    // Auto-login as the school's admin staff so the dashboard is immediately accessible
     if (result.adminStaff && result.adminStaff.id) {
       localStorage.setItem(CURRENT_STAFF_KEY, result.adminStaff.id);
+      localStorage.setItem('sms_current_staff_name', result.adminStaff.name || 'Admin');
+      localStorage.setItem('sms_current_staff_role', result.adminStaff.role || 'Admin');
     }
     return result;
   }
@@ -201,6 +203,8 @@
   function logoutSchool() {
     localStorage.removeItem(CURRENT_SCHOOL_KEY);
     localStorage.removeItem(CURRENT_STAFF_KEY);
+    localStorage.removeItem('sms_current_staff_name');
+    localStorage.removeItem('sms_current_staff_role');
     localStorage.removeItem(CURRENT_STUDENT_KEY);
     localStorage.removeItem(CURRENT_USER_KEY);
   }
@@ -257,6 +261,8 @@
 
     if (!result.ok) return result;
     localStorage.setItem(CURRENT_STAFF_KEY, result.staff.id);
+    localStorage.setItem('sms_current_staff_name', result.staff.name || '');
+    localStorage.setItem('sms_current_staff_role', result.staff.role || '');
     if (result.staff.schoolId) setSchoolId(result.staff.schoolId);
     return result;
   }
@@ -267,6 +273,8 @@
 
   function logoutStaff() {
     localStorage.removeItem(CURRENT_STAFF_KEY);
+    localStorage.removeItem('sms_current_staff_name');
+    localStorage.removeItem('sms_current_staff_role');
   }
 
   function logoutTeacher() {

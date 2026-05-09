@@ -24,28 +24,28 @@
     return String(staff && staff.role ? staff.role : "").toLowerCase().indexOf("admin") !== -1;
   }
 
-  async function ensureAuth() {
-    // Session lives in localStorage — check it first, no API needed
-    const staffId  = localStorage.getItem('sms_current_staff');
-    const schoolId = localStorage.getItem('sms_current_school');
+  function ensureAuth() {
+    const staffId   = localStorage.getItem('sms_current_staff');
+    const schoolId  = localStorage.getItem('sms_current_school');
     if (!staffId || !schoolId) {
       window.location.href = "school-home.html";
       return null;
     }
 
-    // Fetch staff details for role check + name display.
-    // If the API is temporarily unavailable, fall back to a stub so the
-    // dashboard still loads rather than bouncing the user.
-    const apiStaff = await SMSStore.getCurrentStaff();
-    const staff = apiStaff || { id: staffId, name: 'Admin', role: 'Admin', department: 'Administration', status: 'active' };
+    // Role and name are cached at login time — no async API call needed here.
+    const staffRole = localStorage.getItem('sms_current_staff_role') || 'Admin';
+    const staffName = localStorage.getItem('sms_current_staff_name') || 'Admin';
 
-    if (!isAdminStaff(staff)) {
+    if (!isAdminStaff({ role: staffRole })) {
       window.alert("Admin access only.");
       window.location.href = "school-home.html";
       return null;
     }
 
-    return { school: { id: schoolId }, staff };
+    return {
+      school: { id: schoolId },
+      staff:  { id: staffId, name: staffName, role: staffRole, department: '', status: 'active' }
+    };
   }
 
   function switchTab(tab) {
@@ -952,7 +952,7 @@
   async function init() {
     if (!["dashboard", "admin-dashboard"].includes(document.body.dataset.page || "")) return;
 
-    const context = await ensureAuth();
+    const context = ensureAuth();
     if (!context) return;
 
     // Show logged-in user immediately
