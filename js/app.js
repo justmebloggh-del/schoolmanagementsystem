@@ -955,22 +955,29 @@
     const context = await ensureAuth();
     if (!context) return;
 
+    // Show logged-in user immediately
     const userLabel = byId("dashboardUser");
     if (userLabel) userLabel.textContent = context.staff.name + " — " + context.staff.role;
 
-    await refreshDashboard("");
-
-    const attendanceDate = document.querySelector('#attendanceForm input[name="date"]');
-    if (attendanceDate) attendanceDate.value = new Date().toISOString().slice(0, 10);
-
-    // Open the tab named in the URL hash, e.g. admin-dashboard.html#students
+    // Switch to the hash tab right away so the right section is visible before data loads
     const hashTab = (window.location.hash || "").replace("#", "");
     if (hashTab && document.getElementById("tab-" + hashTab)) {
       switchTab(hashTab);
-      if (hashTab === "job-applications") renderJobApplications();
     }
 
+    // Set today's date on the attendance form
+    const attendanceDate = document.querySelector('#attendanceForm input[name="date"]');
+    if (attendanceDate) attendanceDate.value = new Date().toISOString().slice(0, 10);
+
+    // Bind all event handlers NOW so tabs and forms are interactive immediately,
+    // before the data API call completes.
     bindEvents(context);
+
+    // Load and render all data (runs after UI is already interactive)
+    await refreshDashboard("");
+
+    // If the careers tab was opened via hash, load its data now that the API call is done
+    if (hashTab === "job-applications") renderJobApplications();
   }
 
   document.addEventListener("DOMContentLoaded", function () { init(); });
