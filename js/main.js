@@ -229,11 +229,9 @@
           return;
         }
 
-        const note =
-          "School account created. Staff login: " +
-          result.defaultStaff.email +
-          " / " +
-          result.defaultStaff.password;
+        var staffEmail = (result.defaultStaff && result.defaultStaff.email) || result.adminEmail || "—";
+        var staffPass  = (result.defaultStaff && result.defaultStaff.password) || result.defaultPassword || "Staff@123";
+        var note = "School created! Admin login: " + staffEmail + " / " + staffPass;
         showMessage(createMessage, note, false);
 
         setTimeout(function () {

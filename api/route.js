@@ -83,7 +83,7 @@ async function handleSchoolRegister(req, res) {
     await db.from('sms_courses').insert({ id: cid, school_id: schoolId2, ...c, active: true });
   }
 
-  res.json({ ok: true, message: 'School registered.', school: { id: schoolId2, name: schoolName, email: schoolEmail }, staffId, defaultPassword: adminPass });
+  res.json({ ok: true, message: 'School registered.', school: { id: schoolId2, name: schoolName, email: schoolEmail }, staffId, defaultPassword: adminPass, defaultStaff: { id: staffId, email: adminEmail, password: adminPass } });
 }
 
 async function handleSchoolLogin(req, res) {

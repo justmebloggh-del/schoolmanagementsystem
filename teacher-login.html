@@ -34,6 +34,7 @@
       <div class="login-panel">
         <p class="eyebrow">Staff Access Only</p>
         <h2>Staff Login</h2>
+        <div id="schoolContextBanner" style="display:none;margin-bottom:1rem;padding:0.75rem 1rem;border-radius:8px;font-size:0.875rem"></div>
         <p>Sign in with your staff ID or email and password.</p>
         <form id="teacherLoginForm" class="app-form" novalidate>
           <label>
@@ -44,12 +45,11 @@
             Password
             <input type="password" name="password" required placeholder="Your password">
           </label>
-          <button class="btn btn-primary full" type="submit">Sign In</button>
+          <button class="btn btn-primary full" type="submit" id="staffLoginBtn">Sign In</button>
           <p id="teacherLoginMessage" class="form-message" role="status" aria-live="polite"></p>
         </form>
         <div class="panel sub-panel">
-          <p><strong>Demo staff:</strong> admin@fasemkye.edu.gh / Staff@123</p>
-          <p><a href="school-auth.html">Select Different School</a></p>
+          <p>Credentials are created when your school account is set up. <a href="school-auth.html">Select school</a>.</p>
         </div>
       </div>
     </div>
@@ -65,6 +65,26 @@
   <script src="js/storage.js"></script>
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
+
+    (async function () {
+      const banner = document.getElementById('schoolContextBanner');
+      const btn    = document.getElementById('staffLoginBtn');
+      const school = await SMSStore.getCurrentSchool();
+      if (school) {
+        banner.style.display = 'block';
+        banner.style.background = '#eff6ff';
+        banner.style.border = '1px solid #bfdbfe';
+        banner.style.color = '#1e40af';
+        banner.innerHTML = '<i class="fa-solid fa-school" style="margin-right:6px"></i>Signing in to: <strong>' + school.name + '</strong>';
+      } else {
+        banner.style.display = 'block';
+        banner.style.background = '#fef3c7';
+        banner.style.border = '1px solid #fcd34d';
+        banner.style.color = '#92400e';
+        banner.innerHTML = '<i class="fa-solid fa-triangle-exclamation" style="margin-right:6px"></i>No school selected. <a href="school-auth.html" style="color:#b45309;font-weight:600">Select a school first</a>.';
+        if (btn) btn.disabled = true;
+      }
+    })();
 
     const form = document.getElementById('teacherLoginForm');
     const messageEl = document.getElementById('teacherLoginMessage');

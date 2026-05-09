@@ -61,7 +61,7 @@
       return payload;
     } catch (error) {
       console.error('API Error:', error);
-      return { ok: false, message: 'Cannot connect to the API server. Ensure Python server is running: python3 server.py' };
+      return { ok: false, message: 'Cannot connect to the API server. Check your internet connection.' };
     }
   }
 
