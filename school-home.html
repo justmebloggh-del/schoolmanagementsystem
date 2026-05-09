@@ -101,7 +101,7 @@
     .portal-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 1.25rem;
+      gap: 1rem;
       margin-top: 1.5rem;
     }
     .portal-card {
@@ -240,7 +240,7 @@
         <span class="school-meta-item" id="metaAddress" style="display:none"><i class="fa-solid fa-location-dot"></i> <span></span></span>
       </div>
       <div class="school-hero-actions">
-        <a href="admin-login.html" class="btn-white"><i class="fa-solid fa-gauge-high"></i> Admin Dashboard</a>
+        <a href="admin-dashboard.html" class="btn-white"><i class="fa-solid fa-gauge-high"></i> Open Dashboard</a>
         <a href="school-auth.html" class="btn-outline-white" id="switchSchoolBtn"><i class="fa-solid fa-right-left"></i> Switch School</a>
       </div>
     </div>
@@ -296,50 +296,71 @@
         <div>
           <div class="section-head" style="margin-bottom:1rem">
             <h2>School Operations</h2>
-            <p>Select a section to manage your school.</p>
+            <p>Select a section to open the management page directly.</p>
           </div>
 
           <div class="portal-grid">
-            <a class="portal-card" href="admin-login.html">
+            <a class="portal-card" href="admin-dashboard.html#overview">
               <div class="portal-card-icon blue"><i class="fa-solid fa-gauge-high"></i></div>
-              <h3>Admin Dashboard</h3>
-              <p>Full control over students, staff, courses, attendance, results, and reports.</p>
-              <span class="card-arrow">Open dashboard <i class="fa-solid fa-arrow-right"></i></span>
+              <h3>Overview</h3>
+              <p>School-wide stats, recent admissions, exam results, and announcements.</p>
+              <span class="card-arrow">Open overview <i class="fa-solid fa-arrow-right"></i></span>
             </a>
 
-            <a class="portal-card" href="admissions.html">
+            <a class="portal-card" href="admin-dashboard.html#students">
+              <div class="portal-card-icon teal"><i class="fa-solid fa-user-graduate"></i></div>
+              <h3>Student Files</h3>
+              <p>Create student logins, view profiles, suspend accounts, register for courses.</p>
+              <span class="card-arrow">Manage students <i class="fa-solid fa-arrow-right"></i></span>
+            </a>
+
+            <a class="portal-card" href="admin-dashboard.html#applications">
               <div class="portal-card-icon green"><i class="fa-solid fa-user-plus"></i></div>
               <h3>Admissions</h3>
-              <p>Accept new student applications. Applications route directly to this school.</p>
-              <span class="card-arrow">View form <i class="fa-solid fa-arrow-right"></i></span>
+              <p>Review applications, approve to create student accounts, or reject.</p>
+              <span class="card-arrow">Manage admissions <i class="fa-solid fa-arrow-right"></i></span>
             </a>
 
-            <a class="portal-card" href="student-login.html">
-              <div class="portal-card-icon teal"><i class="fa-solid fa-user-graduate"></i></div>
-              <h3>Student Portal</h3>
-              <p>Students log in to register for courses, check results, and view attendance.</p>
-              <span class="card-arrow">Student login <i class="fa-solid fa-arrow-right"></i></span>
-            </a>
-
-            <a class="portal-card" href="teacher-login.html">
+            <a class="portal-card" href="admin-dashboard.html#staff">
               <div class="portal-card-icon purple"><i class="fa-solid fa-chalkboard-user"></i></div>
-              <h3>Staff Login</h3>
-              <p>Teachers and administrative staff sign in to manage their duties.</p>
-              <span class="card-arrow">Staff login <i class="fa-solid fa-arrow-right"></i></span>
+              <h3>Staff Files</h3>
+              <p>Create staff logins with roles and passwords, suspend or reset access.</p>
+              <span class="card-arrow">Manage staff <i class="fa-solid fa-arrow-right"></i></span>
             </a>
 
-            <a class="portal-card" href="course-registration.html">
+            <a class="portal-card" href="admin-dashboard.html#registrations">
               <div class="portal-card-icon amber"><i class="fa-solid fa-list-check"></i></div>
-              <h3>Course Registration</h3>
-              <p>Students register for courses for a given term using their student ID.</p>
-              <span class="card-arrow">Register courses <i class="fa-solid fa-arrow-right"></i></span>
+              <h3>Registrations</h3>
+              <p>View all student course registrations by term. Admin-register students directly.</p>
+              <span class="card-arrow">View registrations <i class="fa-solid fa-arrow-right"></i></span>
             </a>
 
-            <a class="portal-card" href="careers.html">
+            <a class="portal-card" href="admin-dashboard.html#courses">
+              <div class="portal-card-icon blue"><i class="fa-solid fa-book-open"></i></div>
+              <h3>Courses</h3>
+              <p>Add courses, set credits and seats, activate or deactivate offerings.</p>
+              <span class="card-arrow">Manage courses <i class="fa-solid fa-arrow-right"></i></span>
+            </a>
+
+            <a class="portal-card" href="admin-dashboard.html#attendance">
+              <div class="portal-card-icon teal"><i class="fa-solid fa-calendar-check"></i></div>
+              <h3>Attendance</h3>
+              <p>Record daily attendance by course and view full attendance history.</p>
+              <span class="card-arrow">Manage attendance <i class="fa-solid fa-arrow-right"></i></span>
+            </a>
+
+            <a class="portal-card" href="admin-dashboard.html#results">
+              <div class="portal-card-icon purple"><i class="fa-solid fa-chart-simple"></i></div>
+              <h3>Exam Results</h3>
+              <p>Record scores and grades per student and term. Delete incorrect entries.</p>
+              <span class="card-arrow">Manage results <i class="fa-solid fa-arrow-right"></i></span>
+            </a>
+
+            <a class="portal-card" href="admin-dashboard.html#job-applications">
               <div class="portal-card-icon red"><i class="fa-solid fa-briefcase"></i></div>
-              <h3>Careers & Jobs</h3>
-              <p>Post job openings and receive applications from qualified candidates.</p>
-              <span class="card-arrow">View openings <i class="fa-solid fa-arrow-right"></i></span>
+              <h3>Careers</h3>
+              <p>Review job applications from candidates. Shortlist or reject applicants.</p>
+              <span class="card-arrow">Manage careers <i class="fa-solid fa-arrow-right"></i></span>
             </a>
           </div>
         </div>
@@ -361,9 +382,9 @@
           </div>
 
           <div class="info-block" style="background:#fef9f0;border-color:#fed7aa">
-            <h4 style="color:#92400e">Quick Admin</h4>
-            <p style="font-size:0.82rem;color:#78350f;margin:0 0 0.75rem">Admin staff sign in with their staff credentials.</p>
-            <a href="admin-login.html" class="btn btn-primary" style="width:100%;text-align:center;display:block">Admin Sign In</a>
+            <h4 style="color:#92400e">Quick Access</h4>
+            <p style="font-size:0.82rem;color:#78350f;margin:0 0 0.75rem">Jump straight into the admin dashboard to manage your school.</p>
+            <a href="admin-dashboard.html" class="btn btn-primary" style="width:100%;text-align:center;display:block">Open Admin Dashboard</a>
           </div>
         </aside>
       </div>

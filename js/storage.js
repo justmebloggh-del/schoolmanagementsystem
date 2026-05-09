@@ -176,6 +176,10 @@
 
     if (!result.ok) return result;
     setSchoolId(result.school.id);
+    // Auto-login as the newly created admin staff
+    if (result.staffId) {
+      localStorage.setItem(CURRENT_STAFF_KEY, result.staffId);
+    }
     return result;
   }
 
@@ -187,6 +191,10 @@
 
     if (!result.ok) return result;
     setSchoolId(result.school.id);
+    // Auto-login as the school's admin staff so the dashboard is immediately accessible
+    if (result.adminStaff && result.adminStaff.id) {
+      localStorage.setItem(CURRENT_STAFF_KEY, result.adminStaff.id);
+    }
     return result;
   }
 

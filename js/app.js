@@ -925,6 +925,12 @@
     const attendanceDate = document.querySelector('#attendanceForm input[name="date"]');
     if (attendanceDate) attendanceDate.value = new Date().toISOString().slice(0, 10);
 
+    // Open the tab named in the URL hash, e.g. admin-dashboard.html#students
+    const hashTab = (window.location.hash || "").replace("#", "");
+    if (hashTab && document.getElementById("tab-" + hashTab)) {
+      switchTab(hashTab);
+    }
+
     bindEvents(context);
   }
 

@@ -92,7 +92,17 @@ async function handleSchoolLogin(req, res) {
   const { data } = await db.from('sms_schools').select('*').eq('email', email.toLowerCase().trim()).single();
   if (!data || data.password !== password)
     return res.status(401).json({ ok: false, message: 'Invalid email or password.' });
-  res.json({ ok: true, school: { id: data.id, name: data.name, email: data.email } });
+
+  // Return the first admin staff so the client can auto-authenticate
+  const { data: adminRows } = await db.from('sms_staff')
+    .select('id, name, email, role, department, status')
+    .eq('school_id', data.id)
+    .ilike('role', '%admin%')
+    .order('created_at', { ascending: true })
+    .limit(1);
+  const adminStaff = adminRows && adminRows.length ? adminRows[0] : null;
+
+  res.json({ ok: true, school: { id: data.id, name: data.name, email: data.email }, adminStaff });
 }
 
 async function handleGetData(req, res) {
